@@ -15,11 +15,11 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
      */
     public function questionnaireAction()
     {
-        $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params('id'));
+        $questionnaire = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findOneById($this->params('id'));
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService')->isActionGranted($questionnaire, 'read');
 
         if ($permission) {
-            $flatQuestions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermissionWithAnswers('read', $questionnaire->getSurvey(), [$questionnaire->getId()]);
+            $flatQuestions = $this->getEntityManager()->getRepository(\Application\Model\Question\AbstractQuestion::class)->getAllWithPermissionWithAnswers('read', $questionnaire->getSurvey(), [$questionnaire->getId()]);
             $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
 
             $view = new ExcelModel($this->params('filename'), [
@@ -38,7 +38,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
     public function surveyAction()
     {
         /* @var $survey \Application\Model\Survey */
-        $survey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneById($this->params('id'));
+        $survey = $this->getEntityManager()->getRepository(\Application\Model\Survey::class)->findOneById($this->params('id'));
 
         // Questions permissions and organisation
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService')->isActionGranted($survey, 'read');
@@ -47,7 +47,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
 
             // Questionnaires organisation
             $askedQuestionnaires = explode(',', trim($this->params()->fromQuery('questionnaires'), ','));
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllWithPermission('read', null, 'survey', $survey);
+            $questionnaires = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->getAllWithPermission('read', null, 'survey', $survey);
             usort($questionnaires, function ($a, $b) {
                 return strcmp($a->getName(), $b->getName());
             });
@@ -63,7 +63,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
             }
 
             $questionnairesIds = array_map(function ($q) {return $q->getId();}, $questionnaireList);
-            $flatQuestions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermissionWithAnswers('read', $survey, $questionnairesIds);
+            $flatQuestions = $this->getEntityManager()->getRepository(\Application\Model\Question\AbstractQuestion::class)->getAllWithPermissionWithAnswers('read', $survey, $questionnairesIds);
             $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
 
             if ($questions) {

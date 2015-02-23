@@ -96,7 +96,7 @@ class Parser
     public function getFilterRepository()
     {
         if (!$this->filterRepository) {
-            $this->filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+            $this->filterRepository = $this->getEntityManager()->getRepository(\Application\Model\Filter::class);
         }
 
         return $this->filterRepository;
@@ -121,7 +121,7 @@ class Parser
     public function getPartRepository()
     {
         if (!$this->partRepository) {
-            $this->partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
+            $this->partRepository = $this->getEntityManager()->getRepository(\Application\Model\Part::class);
         }
 
         return $this->partRepository;
@@ -146,7 +146,7 @@ class Parser
     public function getQuestionnaireRepository()
     {
         if (!$this->questionnaireRepository) {
-            $this->questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+            $this->questionnaireRepository = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class);
         }
 
         return $this->questionnaireRepository;
@@ -171,7 +171,7 @@ class Parser
     public function getRuleRepository()
     {
         if (!$this->ruleRepository) {
-            $this->ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $this->ruleRepository = $this->getEntityManager()->getRepository(\Application\Model\Rule\Rule::class);
         }
 
         return $this->ruleRepository;

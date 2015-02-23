@@ -36,9 +36,9 @@ class FilterQuestionnaireUsageRepositoryTest extends AbstractRepository
         $this->getEntityManager()->flush();
         $this->getEntityManager()->clear();
 
-        $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
+        $ruleRepository = $this->getEntityManager()->getRepository(\Application\Model\Rule\Rule::class);
         $loadedRule = $ruleRepository->findOneById($rule->getId());
-        $this->assertInstanceOf('Application\Model\Rule\Rule', $loadedRule, 'should be the correct class');
+        $this->assertInstanceOf(\Application\Model\Rule\Rule::class, $loadedRule, 'should be the correct class');
 
         $this->assertNotSame($rule, $loadedRule, 'should not be same object, since we entirely cleared Doctrine and reloaded a new object');
         $this->assertSame($rule->getId(), $loadedRule->getId(), 'should be same ID');

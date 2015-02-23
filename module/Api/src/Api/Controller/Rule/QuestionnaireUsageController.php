@@ -14,7 +14,7 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
     public function computeAction()
     {
         $questionnaireIds = array_filter(explode(',', $this->params()->fromQuery('questionnaires')));
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findById($questionnaireIds);
+        $questionnaires = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findById($questionnaireIds);
 
         $calculator = new Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());

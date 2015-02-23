@@ -43,25 +43,25 @@ return [
         ],
         'configuration' => [
             'orm_default' => [
-                'naming_strategy' => 'Application\Service\NamingStrategyFactory',
+                'naming_strategy' => \Application\Service\NamingStrategyFactory::class,
                 'types' => [
                     'geometry' => 'CrEOF\Spatial\DBAL\Types\GeometryType',
                     'point' => 'CrEOF\Spatial\DBAL\Types\Geometry\PointType',
                     'polygon' => 'CrEOF\Spatial\DBAL\Types\Geometry\PolygonType',
                     'linestring' => 'CrEOF\Spatial\DBAL\Types\Geometry\LineStringType',
-                    'questionnaire_status' => 'Application\DBAL\Types\QuestionnaireStatusType',
-                    'survey_type' => 'Application\DBAL\Types\SurveyTypeType',
+                    'questionnaire_status' => \Application\DBAL\Types\QuestionnaireStatusType::class,
+                    'survey_type' => \Application\DBAL\Types\SurveyTypeType::class,
                 ],
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
                 'generate_proxies' => false,
                 'datetime_functions' => [
-                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                    'CAST' => \Application\ORM\AST\Functions\CastFunction::class,
                 ],
                 'string_functions' => [
-                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                    'CAST' => \Application\ORM\AST\Functions\CastFunction::class,
                 ],
                 'numeric_functions' => [
-                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                    'CAST' => \Application\ORM\AST\Functions\CastFunction::class,
                 ],
             ],
         ],
@@ -82,7 +82,7 @@ return [
                 'options' => [
                     'route' => '/',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => \Application\Controller\Index::class,
                         'action' => 'index',
                     ],
                 ],
@@ -167,10 +167,10 @@ return [
     'service_manager' => [
         'factories' => [
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
-            'ViewExcelRenderer' => 'Application\Service\ViewExcelRendererFactory',
-            'ViewExcelStrategy' => 'Application\Service\ViewExcelStrategyFactory',
-            'Application\Service\NamingStrategyFactory' => 'Application\Service\NamingStrategyFactory',
-            'Calculator\Cache' => 'Application\Service\Calculator\Cache\Factory',
+            'ViewExcelRenderer' => \Application\Service\ViewExcelRendererFactory::class,
+            'ViewExcelStrategy' => \Application\Service\ViewExcelStrategyFactory::class,
+            \Application\Service\NamingStrategyFactory::class => \Application\Service\NamingStrategyFactory::class,
+            'Calculator\Cache' => \Application\Service\Calculator\Cache\Factory::class,
         ],
     ],
     'translator' => [
@@ -185,10 +185,10 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Console' => 'Application\Controller\ConsoleController',
-            'Application\Controller\Email' => 'Application\Controller\EmailController',
-            'zfcuser' => 'Application\Controller\AuthController',
+            'Application\Controller\Index' => \Application\Controller\IndexController::class,
+            'Application\Controller\Console' => \Application\Controller\ConsoleController::class,
+            'Application\Controller\Email' => \Application\Controller\EmailController::class,
+            'zfcuser' => \Application\Controller\AuthController::class,
         ],
     ],
     'view_manager' => [
@@ -209,16 +209,16 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'headLink' => 'Application\View\Helper\HeadLink',
-            'headScript' => 'Application\View\Helper\HeadScript',
-            'metadata' => 'Application\View\Helper\Metadata',
-            'crudButtons' => 'Application\View\Helper\CrudButtons',
-            'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
-            'version' => 'Application\View\Helper\Version',
-            'excelTable' => 'Application\View\Helper\ExcelTable',
-            'googleAnalytics' => 'Application\View\Helper\GoogleAnalytics',
-            'helpButton' => 'Application\View\Helper\HelpButton',
-            'helpBox' => 'Application\View\Helper\HelpBox',
+            'headLink' => \Application\View\Helper\HeadLink::class,
+            'headScript' => \Application\View\Helper\HeadScript::class,
+            'metadata' => \Application\View\Helper\Metadata::class,
+            'crudButtons' => \Application\View\Helper\CrudButtons::class,
+            'bodyCssClass' => \Application\View\Helper\BodyCssClass::class,
+            'version' => \Application\View\Helper\Version::class,
+            'excelTable' => \Application\View\Helper\ExcelTable::class,
+            'googleAnalytics' => \Application\View\Helper\GoogleAnalytics::class,
+            'helpButton' => \Application\View\Helper\HelpButton::class,
+            'helpBox' => \Application\View\Helper\HelpBox::class,
         ],
     ],
     'console' => [
@@ -229,7 +229,7 @@ return [
                     'options' => [
                         'route' => 'import jmp <file>',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'importJmp',
                         ],
                     ],
@@ -239,7 +239,7 @@ return [
                     'options' => [
                         'route' => 'import glass',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'importGlass',
                         ],
                     ],
@@ -249,7 +249,7 @@ return [
                     'options' => [
                         'route' => 'import population <file>',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'importPopulation',
                         ],
                     ],
@@ -259,7 +259,7 @@ return [
                     'options' => [
                         'route' => 'email <action> <id>',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Email',
+                            'controller' => \Application\Controller\Email::class,
                         ],
                     ],
                 ],
@@ -268,7 +268,7 @@ return [
                     'options' => [
                         'route' => 'email notifyRoleRequest <recipientsIds> <applicantUserId> <emailLinkQueryString>',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Email',
+                            'controller' => \Application\Controller\Email::class,
                             'action' => 'notifyRoleRequest',
                         ],
                     ],
@@ -278,7 +278,7 @@ return [
                     'options' => [
                         'route' => 'generate welcome',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Email',
+                            'controller' => \Application\Controller\Email::class,
                             'action' => 'generateWelcome',
                         ],
                     ],
@@ -288,7 +288,7 @@ return [
                     'options' => [
                         'route' => 'cache clear',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'cacheClear',
                         ],
                     ],
@@ -298,7 +298,7 @@ return [
                     'options' => [
                         'route' => 'cache warm-up <userId>',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'cacheWarmUp',
                         ],
                     ],
@@ -308,7 +308,7 @@ return [
                     'options' => [
                         'route' => 'cache warm-up <userId> <geoname>',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'cacheWarmUpOne',
                         ],
                     ],
@@ -318,7 +318,7 @@ return [
                     'options' => [
                         'route' => 'compute population',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Console',
+                            'controller' => \Application\Controller\Console::class,
                             'action' => 'computePopulation',
                         ],
                     ],

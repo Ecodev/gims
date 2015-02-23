@@ -177,7 +177,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->answer->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part)->setValuePercent(0.55);
 
         // Get existing roles
-        $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
+        $roleRepository = $this->getEntityManager()->getRepository(\Application\Model\Role::class);
         $this->surveyEditor = $roleRepository->findOneByName('Survey editor');
         $this->questionnaireReporter = $roleRepository->findOneByName('Questionnaire reporter');
         $this->filterEditor = $roleRepository->findOneByName('Filter editor');

@@ -54,7 +54,7 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $permissionSurvey = new \Application\Model\Permission('permission survey');
         $permissionQuestionnaire = new \Application\Model\Permission('permission questionnaire');
         $permissionFilterSet = new \Application\Model\Permission('permission filterset');
-        $permissionAnswer = $this->getEntityManager()->getRepository('Application\Model\Permission')->findOneByName('Answer-update');
+        $permissionAnswer = $this->getEntityManager()->getRepository(\Application\Model\Permission::class)->findOneByName('Answer-update');
 
         $role->addPermission($permission);
         $role->addPermission($permissionSurvey);
@@ -119,7 +119,7 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         /* @var \ZfcRbac\Service\RoleService $roleService */
         $roleService = $this->getApplicationServiceLocator()->get('ZfcRbac\Service\RoleService');
 
-        $identityProvider = $this->getApplicationServiceLocator()->get('Application\Service\FakeIdentityProvider');
+        $identityProvider = $this->getApplicationServiceLocator()->get(\Application\Service\FakeIdentityProvider::class);
         $identityProvider->setIdentity(null);
 
         $this->assertTrue($roleService->matchIdentityRoles(['anonymous']), 'Not logged in users have builtin anonymous role');

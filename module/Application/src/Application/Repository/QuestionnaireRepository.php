@@ -243,23 +243,23 @@ class QuestionnaireRepository extends AbstractChildRepository
     private function getQuestionnaires(array $questionnaireIds)
     {
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addEntityResult('Application\Model\Questionnaire', 'questionnaire');
+        $rsm->addEntityResult(\Application\Model\Questionnaire::class, 'questionnaire');
         $rsm->addFieldResult('questionnaire', 'questionnaire_id', 'id');
         $rsm->addFieldResult('questionnaire', 'questionnaire_status', 'status');
         $rsm->addFieldResult('questionnaire', 'questionnaire_comments', 'comments');
-        $rsm->addJoinedEntityResult('Application\Model\Geoname', 'geoname', 'questionnaire', 'geoname');
+        $rsm->addJoinedEntityResult(\Application\Model\Geoname::class, 'geoname', 'questionnaire', 'geoname');
         $rsm->addFieldResult('geoname', 'geoname_id', 'id');
         $rsm->addFieldResult('geoname', 'geoname_name', 'name');
-        $rsm->addJoinedEntityResult('Application\Model\Survey', 'survey', 'questionnaire', 'survey');
+        $rsm->addJoinedEntityResult(\Application\Model\Survey::class, 'survey', 'questionnaire', 'survey');
         $rsm->addFieldResult('survey', 'survey_id', 'id');
         $rsm->addFieldResult('survey', 'survey_code', 'code');
         $rsm->addFieldResult('survey', 'survey_year', 'year');
-        $rsm->addJoinedEntityResult('Application\Model\Question\NumericQuestion', 'question', 'survey', 'questions');
+        $rsm->addJoinedEntityResult(\Application\Model\Question\NumericQuestion::class, 'question', 'survey', 'questions');
         $rsm->addFieldResult('question', 'question_id', 'id');
         $rsm->addFieldResult('question', 'question_name', 'name');
         $rsm->addFieldResult('question', 'question_alternate_names', 'alternateNames');
         $rsm->addFieldResult('question', 'question_is_absolute', 'isAbsolute');
-        $rsm->addJoinedEntityResult('Application\Model\Filter', 'question_filter', 'question', 'filter');
+        $rsm->addJoinedEntityResult(\Application\Model\Filter::class, 'question_filter', 'question', 'filter');
         $rsm->addFieldResult('question_filter', 'question_filter_id', 'id');
 
         $qb1 = $this->getEntityManager()->createNativeQuery('SELECT ' . $rsm->generateSelectClause() . '

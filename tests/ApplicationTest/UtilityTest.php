@@ -152,8 +152,8 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function testGetPersistentCacheKey()
     {
-        $foo1 = $this->getNewModelWithId('Application\Model\Filter');
-        $foo2 = $this->getNewModelWithId('Application\Model\Filter');
+        $foo1 = $this->getNewModelWithId(\Application\Model\Filter::class);
+        $foo2 = $this->getNewModelWithId(\Application\Model\Filter::class);
         $collection = new \Doctrine\Common\Collections\ArrayCollection([$foo1, $foo2]);
 
         $values = $this->getCommonCacheValues();
@@ -190,9 +190,9 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function testIndexById()
     {
-        $foo1 = $this->getNewModelWithId('Application\Model\Filter');
-        $foo2 = $this->getNewModelWithId('Application\Model\Filter');
-        $foo3 = $this->getNewModelWithId('Application\Model\Filter');
+        $foo1 = $this->getNewModelWithId(\Application\Model\Filter::class);
+        $foo2 = $this->getNewModelWithId(\Application\Model\Filter::class);
+        $foo3 = $this->getNewModelWithId(\Application\Model\Filter::class);
         $array = [$foo3, $foo2];
 
         $expected = [
@@ -229,9 +229,9 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
     public function testOrderByIds()
     {
         $objects = [];
-        $objects[] = $this->getNewModelWithId('Application\Model\Filter');
-        $objects[] = $this->getNewModelWithId('Application\Model\Filter');
-        $objects[] = $this->getNewModelWithId('Application\Model\Filter');
+        $objects[] = $this->getNewModelWithId(\Application\Model\Filter::class);
+        $objects[] = $this->getNewModelWithId(\Application\Model\Filter::class);
+        $objects[] = $this->getNewModelWithId(\Application\Model\Filter::class);
 
         $ids = [3, 1, 2];
         $ordered = Utility::orderByIds($objects, $ids);

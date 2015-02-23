@@ -23,7 +23,7 @@ class EmailController extends AbstractActionController
      */
     public function getUsersByRole($questionnaire, $wantedRole)
     {
-        $users = $this->getEntityManager()->getRepository('Application\Model\UserQuestionnaire')->getAllWithPermission('read', null, 'questionnaire', $questionnaire);
+        $users = $this->getEntityManager()->getRepository(\Application\Model\UserQuestionnaire::class)->getAllWithPermission('read', null, 'questionnaire', $questionnaire);
 
         $selectedUsers = [];
         foreach ($users as $user) {
@@ -41,7 +41,7 @@ class EmailController extends AbstractActionController
     public function notifyQuestionnaireReportersAction()
     {
         $questionnaireId = $this->getRequest()->getParam('id');
-        $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
+        $questionnaire = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findOneById($questionnaireId);
 
         $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
@@ -59,7 +59,7 @@ class EmailController extends AbstractActionController
     {
         $questionnaireId = $this->getRequest()->getParam('id');
         /** @var Questionnaire $questionnaire */
-        $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
+        $questionnaire = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findOneById($questionnaireId);
 
         //$users = array($questionnaire->getCreator()); // swap with next line to change between selecting the questionnaire creator and the users that have editor role
         $users = $this->getUsersByRole($questionnaire, 'Survey editor');
@@ -77,7 +77,7 @@ class EmailController extends AbstractActionController
     public function notifyQuestionnaireValidatorAction()
     {
         $questionnaireId = $this->getRequest()->getParam('id');
-        $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
+        $questionnaire = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findOneById($questionnaireId);
 
         $users = $this->getUsersByRole($questionnaire, 'Questionnaire validator');
 
@@ -85,7 +85,7 @@ class EmailController extends AbstractActionController
         // They replace the role based feature by a permissions based feature. Instead of notifying Validators, notify everybody that can Validate.
         // getAllHavingPermission() returns a query exception -> why do you do that to us god ?!?
         //
-        // $userRepository = $this->getEntityManager()->getRepository('Application\Model\User');
+        // $userRepository = $this->getEntityManager()->getRepository(\Application\Model\User::class);
         // $users = $userRepository->getAllHavingPermission($questionnaire, \Application\Model\Permission::getPermissionName($questionnaire, 'validate'));
 
         $subject = 'Questionnaire completed : ' . $questionnaire->getName();
@@ -102,10 +102,10 @@ class EmailController extends AbstractActionController
     public function notifyRoleRequestAction()
     {
         $users = Utility::explodeIds($this->getRequest()->getParam('recipientsIds'));
-        $users = $this->getEntityManager()->getRepository('Application\Model\User')->findById($users);
+        $users = $this->getEntityManager()->getRepository(\Application\Model\User::class)->findById($users);
 
         $emailLinkQueryString = $this->getRequest()->getParam('emailLinkQueryString');
-        $applicantUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($this->getRequest()->getParam('applicantUserId'));
+        $applicantUser = $this->getEntityManager()->getRepository(\Application\Model\User::class)->findOneById($this->getRequest()->getParam('applicantUserId'));
 
         $subject = 'Role request';
         $mailParams = [
@@ -122,10 +122,10 @@ class EmailController extends AbstractActionController
     public function notifyCommentAction()
     {
         $commentId = $this->getRequest()->getParam('id');
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Comment');
+        $repository = $this->getEntityManager()->getRepository(\Application\Model\Comment::class);
         $comment = $repository->findOneById($commentId);
         $discussion = $comment->getDiscussion();
-        $users = $this->getEntityManager()->getRepository('Application\Model\User')->getAllForCommentNotification($comment);
+        $users = $this->getEntityManager()->getRepository(\Application\Model\User::class)->getAllForCommentNotification($comment);
 
         $subject = 'Discussion - ' . $discussion->getName();
         $mailParams = [
@@ -142,7 +142,7 @@ class EmailController extends AbstractActionController
     public function activationLinkAction()
     {
         $userId = $this->getRequest()->getParam('id');
-        $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+        $user = $this->getEntityManager()->getRepository(\Application\Model\User::class)->findOneById($userId);
         if (!$user) {
             return;
         }
@@ -164,7 +164,7 @@ class EmailController extends AbstractActionController
     public function changePasswordLinkAction()
     {
         $userId = $this->getRequest()->getParam('id');
-        $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+        $user = $this->getEntityManager()->getRepository(\Application\Model\User::class)->findOneById($userId);
         if (!$user) {
             return;
         }
@@ -185,8 +185,8 @@ class EmailController extends AbstractActionController
      */
     public function generateWelcomeAction()
     {
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getAllWithJmpSurvey();
-        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $geonames = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->getAllWithJmpSurvey();
+        $parts = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findAll();
         $fakeUser = new User();
         $fakeUser->setName('and welcome to GIMS');
         $subject = 'Welcome to GIMS';
@@ -194,7 +194,7 @@ class EmailController extends AbstractActionController
         foreach ($geonames as $geoname) {
             echo $geoname->getName() . PHP_EOL;
 
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($geoname);
+            $questionnaires = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findByGeoname($geoname);
             $questionnaireIds = implode(',', array_map(function ($q) {
                         return $q->getId();
                     }, $questionnaires));

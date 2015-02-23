@@ -517,7 +517,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
         // If we try to delete a filter, we must also consider the side-effect it may have on Rules that use this filter
         if ($action == 'delete') {
-            $repository = \Application\Module::getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $repository = \Application\Module::getEntityManager()->getRepository(\Application\Model\Rule\Rule::class);
             $rulesWithReference = $repository->getAllReferencing($this);
             foreach ($rulesWithReference as $rule) {
                 $contexts->merge($rule->getRoleContext($action));

@@ -3,13 +3,13 @@
 return [
     'controllers' => [
         'invokables' => [
-            'Browse\Controller\Index' => 'Browse\Controller\IndexController',
-            'Browse\Controller\Chart' => 'Browse\Controller\ChartController',
-            'Browse\Controller\Table' => 'Browse\Controller\TableController',
-            'Browse\Controller\Country' => 'Browse\Controller\TableController',
-            'Browse\Controller\Rule' => 'Browse\Controller\RuleController',
-            'Browse\Controller\CellMenu' => 'Browse\Controller\CellMenuController',
-            'Browse\Controller\Discussion' => 'Browse\Controller\DiscussionController',
+            'Browse\Controller\Index' => \Browse\Controller\IndexController::class,
+            'Browse\Controller\Chart' => \Browse\Controller\ChartController::class,
+            'Browse\Controller\Table' => \Browse\Controller\TableController::class,
+            'Browse\Controller\Country' => \Browse\Controller\TableController::class,
+            'Browse\Controller\Rule' => \Browse\Controller\RuleController::class,
+            'Browse\Controller\CellMenu' => \Browse\Controller\CellMenuController::class,
+            'Browse\Controller\Discussion' => \Browse\Controller\DiscussionController::class,
         ],
     ],
     'view_manager' => [

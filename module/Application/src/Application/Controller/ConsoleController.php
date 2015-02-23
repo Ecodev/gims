@@ -65,11 +65,11 @@ class ConsoleController extends AbstractActionController
         $sm = \Application\Module::getServiceManager();
 
         // Override option and re-create roleService with new options
-        $sm->setFactory('Application\Service\FakeIdentityProvider', function () {
+        $sm->setFactory(\Application\Service\FakeIdentityProvider::class, function () {
             return new \Application\Service\FakeIdentityProvider();
         });
         $options = $sm->get('ZfcRbac\Options\ModuleOptions');
-        $options->setIdentityProvider('Application\Service\FakeIdentityProvider');
+        $options->setIdentityProvider(\Application\Service\FakeIdentityProvider::class);
         $factory = new \ZfcRbac\Factory\RoleServiceFactory();
         $roleService = $factory->createService($sm);
 
@@ -78,7 +78,7 @@ class ConsoleController extends AbstractActionController
         $sm->setService('ZfcRbac\Service\RoleService', $roleService);
         $sm->setAllowOverride(false);
 
-        $fakeIdentityProvider = $sm->get('Application\Service\FakeIdentityProvider');
+        $fakeIdentityProvider = $sm->get(\Application\Service\FakeIdentityProvider::class);
         $fakeIdentityProvider->setIdentity($user);
     }
 
@@ -86,7 +86,7 @@ class ConsoleController extends AbstractActionController
     {
         $userId = $this->getRequest()->getParam('userId');
         if ($userId != 'anonymous') {
-            $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+            $user = $this->getEntityManager()->getRepository(\Application\Model\User::class)->findOneById($userId);
             $userName = $user->getName();
         } else {
             $userName = $userId;
@@ -100,7 +100,7 @@ class ConsoleController extends AbstractActionController
             return str_pad($i, $digits, ' ', STR_PAD_LEFT) . '/' . str_pad($total, $digits, ' ', STR_PAD_LEFT);
         };
 
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findBy([], ['id' => 'DESC']);
+        $geonames = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->findBy([], ['id' => 'DESC']);
         $total = count($geonames);
 
         $i = 1;
@@ -118,7 +118,7 @@ class ConsoleController extends AbstractActionController
         $userId = $this->getRequest()->getParam('userId');
 
         if ($userId != 'anonymous') {
-            $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+            $user = $this->getEntityManager()->getRepository(\Application\Model\User::class)->findOneById($userId);
             $this->impersonateUser($user);
         }
 
@@ -129,9 +129,9 @@ class ConsoleController extends AbstractActionController
         $aggregator = new \Application\Service\Calculator\Aggregator();
         $aggregator->setCalculator($calculator);
 
-        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findAll();
-        $geoname = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findOneByName($geonameName);
+        $parts = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findAll();
+        $filters = $this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findAll();
+        $geoname = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->findOneByName($geonameName);
 
         echo $geoname->getName() . PHP_EOL;
         foreach ($parts as $part) {
@@ -142,6 +142,6 @@ class ConsoleController extends AbstractActionController
 
     public function computePopulationAction()
     {
-        $this->getEntityManager()->getRepository('Application\Model\Geoname')->computeAllPopulation();
+        $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->computeAllPopulation();
     }
 }

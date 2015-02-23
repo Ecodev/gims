@@ -83,7 +83,7 @@ class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
         $question->setAlternateNames([]);
         $this->assertNotEmpty($question->getAlternateNames(), 'must not be allowed to be set to empty');
 
-        $questionnaire = $this->getNewModelWithId('Application\Model\Questionnaire');
+        $questionnaire = $this->getNewModelWithId(\Application\Model\Questionnaire::class);
         $question->addAlternateName($questionnaire, 'my alternate name');
         $alternates = $question->getAlternateNames();
         $this->assertArrayHasKey($questionnaire->getId(), $alternates);

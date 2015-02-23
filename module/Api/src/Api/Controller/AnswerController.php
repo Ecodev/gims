@@ -32,7 +32,7 @@ class AnswerController extends AbstractChildRestfulController
 
     protected function completePopulationAnswer(AbstractModel $answer)
     {
-        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository = $this->getEntityManager()->getRepository(\Application\Model\Answer::class);
         $answerRepository->completePopulationAnswer($answer);
         $this->getEntityManager()->refresh($answer);
         $result = $this->hydrator->extract($answer, $this->getJsonConfig());

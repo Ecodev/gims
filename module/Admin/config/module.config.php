@@ -3,15 +3,15 @@
 return [
     'controllers' => [
         'invokables' => [
-            'Admin\Controller\Index' => 'Admin\Controller\IndexController',
-            'Admin\Controller\FilterSet' => 'Admin\Controller\FilterSetController',
-            'Admin\Controller\Filter' => 'Admin\Controller\FilterController',
-            'Admin\Controller\Question' => 'Admin\Controller\QuestionController',
-            'Admin\Controller\Questionnaire' => 'Admin\Controller\QuestionnaireController',
-            'Admin\Controller\Survey' => 'Admin\Controller\SurveyController',
-            'Admin\Controller\User' => 'Admin\Controller\UserController',
-            'Admin\Controller\Rule' => 'Admin\Controller\RuleController',
-            'Admin\Controller\RolesRequests' => 'Admin\Controller\RolesRequestsController',
+            'Admin\Controller\Index' => \Admin\Controller\IndexController::class,
+            'Admin\Controller\FilterSet' => \Admin\Controller\FilterSetController::class,
+            'Admin\Controller\Filter' => \Admin\Controller\FilterController::class,
+            'Admin\Controller\Question' => \Admin\Controller\QuestionController::class,
+            'Admin\Controller\Questionnaire' => \Admin\Controller\QuestionnaireController::class,
+            'Admin\Controller\Survey' => \Admin\Controller\SurveyController::class,
+            'Admin\Controller\User' => \Admin\Controller\UserController::class,
+            'Admin\Controller\Rule' => \Admin\Controller\RuleController::class,
+            'Admin\Controller\RolesRequests' => \Admin\Controller\RolesRequestsController::class,
         ],
     ],
     'view_manager' => [

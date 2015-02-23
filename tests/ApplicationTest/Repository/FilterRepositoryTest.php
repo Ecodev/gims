@@ -10,7 +10,7 @@ class FilterRepositoryTest extends AbstractRepository
 
     public function testGetOneByNames()
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+        $repository = $this->getEntityManager()->getRepository(\Application\Model\Filter::class);
 
         $c1 = new \Application\Model\Filter('parent filter');
         $c2 = new \Application\Model\Filter('child filter');

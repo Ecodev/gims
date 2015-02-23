@@ -3,8 +3,8 @@
 return [
     'service_manager' => [
         'factories' => [
-            'ZfcRbac\Service\AuthorizationService' => 'Application\Service\AuthorizationServiceFactory',
-            'ZfcRbac\View\Strategy\UnauthorizedStrategy' => 'Application\Service\UnauthorizedStrategyFactory',
+            'ZfcRbac\Service\AuthorizationService' => \Application\Service\AuthorizationServiceFactory::class,
+            'ZfcRbac\View\Strategy\UnauthorizedStrategy' => \Application\Service\UnauthorizedStrategyFactory::class,
         ],
         'aliases' => [
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
@@ -15,7 +15,7 @@ return [
         'role_provider' => [
             'ZfcRbac\Role\ObjectRepositoryRoleProvider' => [
                 'object_manager' => 'doctrine.entitymanager.orm_default', // alias for doctrine ObjectManager
-                'class_name' => 'Application\Model\Role', // FQCN for your role entity class
+                'class_name' => \Application\Model\Role::class, // FQCN for your role entity class
                 'role_name_property' => 'name', // Name to show
             ],
         ],

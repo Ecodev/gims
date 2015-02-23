@@ -103,8 +103,8 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
      */
     public function computeAllPopulation()
     {
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
+        $parts = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findAll();
         $calculator = new \Application\Service\Calculator\Calculator();
         $years = $calculator->getYears();
 
@@ -131,7 +131,7 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
      */
     private function computePopulation(\Application\Model\Geoname $geoname, \Application\Model\Part $part, $year)
     {
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
 
         $children = $geoname->getChildren();
         if (count($children)) {

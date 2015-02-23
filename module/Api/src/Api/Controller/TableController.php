@@ -34,13 +34,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function filterAction()
     {
-        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
+        $filterSet = $this->getEntityManager()->getRepository(\Application\Model\FilterSet::class)->findOneById($this->params()->fromQuery('filterSet'));
 
         $result = [];
         if ($filterSet) {
             $idQuestionnaires = Utility::explodeIds($this->params()->fromQuery('questionnaire'));
-            $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-            $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+            $questionnaireRepository = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class);
+            $parts = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findAll();
 
             foreach ($idQuestionnaires as $idQuestionnaire) {
                 $questionnaire = $questionnaireRepository->find($idQuestionnaire);
@@ -113,10 +113,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $questionnairesIds = Utility::explodeIds($this->params()->fromQuery('questionnaires'));
         $filtersIds = Utility::explodeIds($this->params()->fromQuery('filters'));
 
-        $questionnaires = Utility::orderByIds($this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findById($questionnairesIds), $questionnairesIds);
+        $questionnaires = Utility::orderByIds($this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findById($questionnairesIds), $questionnairesIds);
         $questionnairesById = Utility::indexById($questionnaires);
-        $filters = Utility::orderByIds($this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds), $filtersIds);
-        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $filters = Utility::orderByIds($this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findById($filtersIds), $filtersIds);
+        $parts = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findAll();
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
 
@@ -169,11 +169,11 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $wantedYears = $this->getWantedYears($this->params()->fromQuery('years'));
         $excelFileName = $this->params('filename');
 
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds, ['name' => 'asc']);
-        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
-        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+        $geonames = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->findById($geonamesIds, ['name' => 'asc']);
+        $filters = $this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findById($filtersIds);
+        $parts = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findAll();
+        $populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
+        $questionnaireRepository = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class);
 
         // Pre-fill cache for things we know that we will need very soon
         $populationRepository->fillPopulationCache($geonames);

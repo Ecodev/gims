@@ -36,11 +36,11 @@ class QuestionType extends AbstractEnum
     private static function getMapping()
     {
         return [
-            'Application\Model\Question\Chapter' => self::$CHAPTER,
-            'Application\Model\Question\NumericQuestion' => self::$NUMERIC,
-            'Application\Model\Question\TextQuestion' => self::$TEXT,
-            'Application\Model\Question\ChoiceQuestion' => self::$CHOICE,
-            'Application\Model\Question\UserQuestion' => self::$USER,
+            \Application\Model\Question\Chapter::class => self::$CHAPTER,
+            \Application\Model\Question\NumericQuestion::class => self::$NUMERIC,
+            \Application\Model\Question\TextQuestion::class => self::$TEXT,
+            \Application\Model\Question\ChoiceQuestion::class => self::$CHOICE,
+            \Application\Model\Question\UserQuestion::class => self::$USER,
         ];
     }
 

@@ -55,9 +55,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $geonameIds = array_filter(explode(',', $this->params()->fromQuery('geonames')));
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
 
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getByIdForComputing($geonameIds);
-        $filters = Utility::indexById(Utility::orderByIds($this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds), $filtersIds));
-        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
+        $geonames = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->getByIdForComputing($geonameIds);
+        $filters = Utility::indexById(Utility::orderByIds($this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findById($filtersIds), $filtersIds));
+        $part = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findOneById($this->params()->fromQuery('part'));
 
         $series = [];
         foreach ($geonames as $geoname) {
@@ -185,7 +185,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $series = [];
 
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
-        $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
+        $filterGeonameUsageRepo = $this->getEntityManager()->getRepository(\Application\Model\Rule\FilterGeonameUsage::class);
 
         $lines = $this->getAggregator()->computeFlattenAllYears($filters, $geoname, $part);
         foreach ($lines as &$serie) {
@@ -291,16 +291,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     public function getPanelFiltersAction()
     {
         /** @var \Application\Model\Questionnaire $questionnaire */
-        $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params()->fromQuery('questionnaire'));
+        $questionnaire = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class)->findOneById($this->params()->fromQuery('questionnaire'));
 
         if ($questionnaire) {
 
             /** @var \Application\Model\Part $part */
-            $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
+            $part = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->findOneById($this->params()->fromQuery('part'));
 
             // create filters objects
             $filterIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
-            $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filterIds);
+            $filters = $this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findById($filterIds);
 
             $result = [
                 'name' => $questionnaire->getName(),
@@ -372,7 +372,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function addUsagesToFilters(array $flatFilter, Part $part, Questionnaire $questionnaire)
     {
-        $fqus = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage')->getAll($questionnaire->getId(), $flatFilter['filter']['id'], $part->getId());
+        $fqus = $this->getEntityManager()->getRepository(\Application\Model\Rule\FilterQuestionnaireUsage::class)->getAll($questionnaire->getId(), $flatFilter['filter']['id'], $part->getId());
         $flatFilter['usages'] = $this->extractUsages($fqus, $part);
 
         return $flatFilter;
@@ -391,11 +391,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }, $flatFilters);
 
         $alternateNames = $this->getEntityManager()
-                               ->getRepository('Application\Model\Question\AbstractQuestion')
+                               ->getRepository(\Application\Model\Question\AbstractQuestion::class)
                                ->getByFiltersAndQuestionnaire($filterIds, $questionnaire);
 
         $absoluteStatus = $this->getEntityManager()
-                               ->getRepository('Application\Model\Question\AbstractQuestion')
+                               ->getRepository(\Application\Model\Question\AbstractQuestion::class)
                                ->getAbsoluteByFiltersAndQuestionnaire($filterIds, $questionnaire);
 
         foreach ($alternateNames as $alternateName) {
@@ -471,9 +471,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             return [];
         }
 
-        $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($referenceId);
-        $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($overridableId);
-        $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($targetId);
+        $reference = $this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findOneById($referenceId);
+        $overridable = $this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findOneById($overridableId);
+        $target = $this->getEntityManager()->getRepository(\Application\Model\Filter::class)->findOneById($targetId);
 
         if (!$reference || !$overridable || !$target) {
             return [];

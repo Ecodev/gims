@@ -14,7 +14,7 @@ class PopulationRepositoryTest extends AbstractRepository
         $survey->setCode('test code');
         $survey->setYear(2000);
 
-        $geoname = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findOneBy(['iso3' => 'CHE']);
+        $geoname = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->findOneBy(['iso3' => 'CHE']);
 
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
@@ -41,7 +41,7 @@ class PopulationRepositoryTest extends AbstractRepository
         $this->getEntityManager()->persist($questionnaire);
         $this->getEntityManager()->flush();
 
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
         $pop = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), 2000);
         $this->assertEquals(5, $pop, 'should return official population');
 

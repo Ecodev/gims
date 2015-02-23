@@ -37,13 +37,13 @@ class Population extends AbstractImporter
         $ruralSheet = $workbook->getSheet(2);
         $totalSheet = $workbook->getSheet(0);
 
-        $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
-        $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
-        $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
+        $this->partUrban = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Urban');
+        $this->partRural = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Rural');
+        $this->partTotal = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Total');
         $this->getEntityManager()->flush(); // Flush to be sure that parts have ID
 
-        $geonameRepository = $this->getEntityManager()->getRepository('Application\Model\Geoname');
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $geonameRepository = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class);
+        $populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
 
         $colIso3 = 2;
         $rowYear = 1;
@@ -93,7 +93,7 @@ class Population extends AbstractImporter
         $geonameRepository->computeAllPopulation();
 
         echo "Compute absolute value, based on population..." . PHP_EOL;
-        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository = $this->getEntityManager()->getRepository(\Application\Model\Answer::class);
         $answerRepository->completePopulationAnswer();
 
         return "$importedValueCount population data imported" . PHP_EOL;

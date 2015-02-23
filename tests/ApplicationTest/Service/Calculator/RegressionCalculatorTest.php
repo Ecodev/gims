@@ -457,8 +457,8 @@ class RegressionCalculatorTest extends AbstractCalculator
         $service = new \Application\Service\Calculator\Calculator();
         $service->setServiceLocator($this->getApplicationServiceLocator());
 
-        $this->assertInstanceOf('Application\Repository\PopulationRepository', $service->getPopulationRepository());
-        $this->assertInstanceOf('Application\Repository\PartRepository', $service->getPartRepository());
+        $this->assertInstanceOf(\Application\Repository\PopulationRepository::class, $service->getPopulationRepository());
+        $this->assertInstanceOf(\Application\Repository\PartRepository::class, $service->getPartRepository());
     }
 
     public function testExcludeRules()

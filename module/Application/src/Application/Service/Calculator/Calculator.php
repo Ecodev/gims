@@ -46,7 +46,7 @@ class Calculator extends AbstractCalculator
     public function getFilterGeonameUsageRepository()
     {
         if (!$this->filterGeonameUsageRepository) {
-            $this->filterGeonameUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
+            $this->filterGeonameUsageRepository = $this->getEntityManager()->getRepository(\Application\Model\Rule\FilterGeonameUsage::class);
         }
 
         return $this->filterGeonameUsageRepository;

@@ -41,8 +41,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->hydrator->expects($this->any())
                 ->method('getObject')
                 ->will($this->returnValueMap([
-                            ['Application\Model\Question\Choice', 1, $this->choice1],
-                            ['Application\Model\Question\Choice', 2, $this->choice2],
+                            [\Application\Model\Question\Choice::class, 1, $this->choice1],
+                            [\Application\Model\Question\Choice::class, 2, $this->choice2],
         ]));
     }
 
@@ -136,7 +136,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         ];
 
         $question = new \Application\Model\Question\NumericQuestion('tst question');
-        $this->assertEquals([], $question->getAlternateNames());
+        $this->assertEquals(\Application\Model\Question\AbstractQuestion::EMPTY_ASSOCIATIVE_ARRAY, $question->getAlternateNames());
 
         $this->hydrator->hydrate($data, $question);
         $this->assertEquals($data['alternateNames'], $question->getAlternateNames());

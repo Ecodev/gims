@@ -92,7 +92,7 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
         if (!isset($this->cache[$questionnaireId])) {
 
             // First we found which geoname is used for the given questionnaire
-            $geonameId = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getIdByQuestionnaireId($questionnaireId);
+            $geonameId = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class)->getIdByQuestionnaireId($questionnaireId);
 
             // Then we get all data for the geoname
             $qb = $this->createQueryBuilder('filterQuestionnaireUsage')

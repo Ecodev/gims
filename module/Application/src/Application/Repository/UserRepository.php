@@ -29,7 +29,7 @@ class UserRepository extends AbstractRepository
         }
 
         $questionnaireRepository = $this->getEntityManager()
-                ->getRepository('Application\Model\Questionnaire');
+                ->getRepository(\Application\Model\Questionnaire::class);
         $questionnaires = $questionnaireRepository->getAllWithPermission();
 
         $sql = "SELECT " . implode(', ', $counts) . " FROM questionnaire WHERE id IN (:questionnaires)";
@@ -62,8 +62,8 @@ class UserRepository extends AbstractRepository
 
         $qb = $this->createQueryBuilder('user');
         $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "relation.$context = $context AND relation.user = :permissionUser");
-        $qb->join('Application\Model\Role', 'role', Join::WITH, "relation.role = role OR role.name = 'member'");
-        $qb->join('Application\Model\Permission', 'permission', Join::WITH, "permission MEMBER OF role.permissions AND permission.name = :permissionPermission");
+        $qb->join(\Application\Model\Role::class, 'role', Join::WITH, "relation.role = role OR role.name = 'member'");
+        $qb->join(\Application\Model\Permission::class, 'permission', Join::WITH, "permission MEMBER OF role.permissions AND permission.name = :permissionPermission");
 
         $qb->setParameter('permissionPermission', $permission);
 

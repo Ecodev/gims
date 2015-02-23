@@ -80,7 +80,7 @@ class QuestionController extends AbstractChildRestfulController
             return $class;
         }
 
-        return '\Application\Model\Question\AbstractQuestion';
+        return \Application\Model\Question\AbstractQuestion::class;
     }
 
     public function getList()
@@ -223,7 +223,7 @@ class QuestionController extends AbstractChildRestfulController
                 $this->getEntityManager()->persist($choice);
             } // if id exists -> update
             else {
-                $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Question\Choice');
+                $choiceRepository = $this->getEntityManager()->getRepository(\Application\Model\Question\Choice::class);
                 $choice = $choiceRepository->findOneById((int) $newChoice['id']);
                 $updatedChoices->add($choice);
             }
@@ -259,7 +259,7 @@ class QuestionController extends AbstractChildRestfulController
     public function create($data)
     {
         /** @var Survey $survey */
-        $survey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneById((int) @$data['survey']);
+        $survey = $this->getEntityManager()->getRepository(\Application\Model\Survey::class)->findOneById((int) @$data['survey']);
 
         // Check that we have a survey
         if (!$survey) {
@@ -267,7 +267,7 @@ class QuestionController extends AbstractChildRestfulController
         }
 
         /** @var \Application\Model\Question\Chapter $chapter */
-        $chapter = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->findOneById((int) @$data['chapter']);
+        $chapter = $this->getEntityManager()->getRepository(\Application\Model\Question\AbstractQuestion::class)->findOneById((int) @$data['chapter']);
         if ($chapter && $lastQuestion = $chapter->getQuestions()->last()) {
             $data['sorting'] = $lastQuestion->getSorting() + 1;
         } else {

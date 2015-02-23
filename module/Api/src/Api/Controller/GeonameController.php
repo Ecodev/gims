@@ -14,7 +14,7 @@ class GeonameController extends AbstractRestfulController
     {
         $geoname = $this->getRepository('\Application\Model\Geoname')->findOneById($this->params()->fromQuery('geoname'));
 
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
         $populations = $populationRepository->getAllYearsForGeonameByPart($geoname);
 
         return new JsonModel($populations);

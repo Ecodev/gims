@@ -21,7 +21,7 @@ class AnswerRepository extends AbstractChildRepository
 
             // First we found which geoname is used for the given questionnaire
             $geonameId = $this->getEntityManager()
-                    ->getRepository('Application\Model\Geoname')
+                    ->getRepository(\Application\Model\Geoname::class)
                     ->getIdByQuestionnaireId($questionnaireId);
 
             // use native query instead of query builder, because answers are related
@@ -196,7 +196,7 @@ class AnswerRepository extends AbstractChildRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('answer, question, questionnaire, choice, part')
-                ->from('Application\Model\Answer', 'answer')
+                ->from(\Application\Model\Answer::class, 'answer')
                 ->join('answer.questionnaire', 'questionnaire')
                 ->join('answer.question', 'question')
                 ->join('answer.part', 'part')

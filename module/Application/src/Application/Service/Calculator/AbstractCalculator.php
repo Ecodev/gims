@@ -62,7 +62,7 @@ abstract class AbstractCalculator
     public function getPopulationRepository()
     {
         if (!$this->populationRepository) {
-            $this->populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+            $this->populationRepository = $this->getEntityManager()->getRepository(\Application\Model\Population::class);
         }
 
         return $this->populationRepository;
@@ -87,7 +87,7 @@ abstract class AbstractCalculator
     public function getQuestionnaireUsageRepository()
     {
         if (!$this->questionnaireUsageRepository) {
-            $this->questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
+            $this->questionnaireUsageRepository = $this->getEntityManager()->getRepository(\Application\Model\Rule\QuestionnaireUsage::class);
         }
 
         return $this->questionnaireUsageRepository;
@@ -112,7 +112,7 @@ abstract class AbstractCalculator
     public function getFilterRepository()
     {
         if (!$this->filterRepository) {
-            $this->filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+            $this->filterRepository = $this->getEntityManager()->getRepository(\Application\Model\Filter::class);
         }
 
         return $this->filterRepository;
@@ -137,7 +137,7 @@ abstract class AbstractCalculator
     public function getPartRepository()
     {
         if (!$this->partRepository) {
-            $this->partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
+            $this->partRepository = $this->getEntityManager()->getRepository(\Application\Model\Part::class);
         }
 
         return $this->partRepository;
@@ -162,7 +162,7 @@ abstract class AbstractCalculator
     public function getQuestionnaireRepository()
     {
         if (!$this->questionnaireRepository) {
-            $this->questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+            $this->questionnaireRepository = $this->getEntityManager()->getRepository(\Application\Model\Questionnaire::class);
         }
 
         return $this->questionnaireRepository;
@@ -187,7 +187,7 @@ abstract class AbstractCalculator
     public function getAnswerRepository()
     {
         if (!$this->answerRepository) {
-            $this->answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+            $this->answerRepository = $this->getEntityManager()->getRepository(\Application\Model\Answer::class);
         }
 
         return $this->answerRepository;
@@ -212,7 +212,7 @@ abstract class AbstractCalculator
     public function getFilterQuestionnaireUsageRepository()
     {
         if (!$this->filterQuestionnaireUsageRepository) {
-            $this->filterQuestionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
+            $this->filterQuestionnaireUsageRepository = $this->getEntityManager()->getRepository(\Application\Model\Rule\FilterQuestionnaireUsage::class);
         }
 
         return $this->filterQuestionnaireUsageRepository;

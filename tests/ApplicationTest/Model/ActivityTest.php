@@ -21,8 +21,8 @@ class ActivityTest extends AbstractModel
         // logout test user, so we don't need to deal with user mergind when clearing EntityManager
         $this->identityProvider->setIdentity(null);
 
-        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-        $activiyRepository = $this->getEntityManager()->getRepository('Application\Model\Activity');
+        $answerRepository = $this->getEntityManager()->getRepository(\Application\Model\Answer::class);
+        $activiyRepository = $this->getEntityManager()->getRepository(\Application\Model\Activity::class);
 
         $survey = new Survey('test survey');
         $survey->setIsActive(true);

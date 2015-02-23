@@ -3,7 +3,7 @@
 return [
     'controllers' => [
         'invokables' => [
-            'Export\Controller\Index' => 'Export\Controller\IndexController',
+            'Export\Controller\Index' => \Export\Controller\IndexController::class,
         ],
     ],
     'view_manager' => [

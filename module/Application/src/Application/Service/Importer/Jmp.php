@@ -95,9 +95,9 @@ class Jmp extends AbstractImporter
         $workbook = $reader->load($filename);
 
         $this->excludeRule = $this->getRule('Exclude from computing', '=NULL');
-        $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
-        $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
-        $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
+        $this->partUrban = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Urban');
+        $this->partRural = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Rural');
+        $this->partTotal = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Total');
 
         $this->partOffsets = [
             3 => $this->partUrban,
@@ -111,7 +111,7 @@ class Jmp extends AbstractImporter
 
             // Also create a filterSet with same name for the first filter
             $firstFilter = $this->cacheFilters[4];
-            $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+            $filterSetRepository = $this->getEntityManager()->getRepository(\Application\Model\FilterSet::class);
             $filterSet = $filterSetRepository->getOrCreate($firstFilter->getName());
             foreach ($firstFilter->getChildren() as $child) {
                 $filterSet->addFilter($child);
@@ -160,7 +160,7 @@ class Jmp extends AbstractImporter
 
         $this->getEntityManager()->flush();
 
-        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository = $this->getEntityManager()->getRepository(\Application\Model\Answer::class);
         $answerRepository->completePopulationAnswer();
 
         $this->cleanUpRatios();
@@ -236,7 +236,7 @@ STRING;
         $code = $this->standardizeSurveyCode($code, $year);
 
         // Load or create survey
-        $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
+        $surveyRepository = $this->getEntityManager()->getRepository(\Application\Model\Survey::class);
         if (array_key_exists($code, $this->cacheSurvey)) {
             $survey = $this->cacheSurvey[$code];
         } else {
@@ -516,7 +516,7 @@ STRING;
             return null;
         }
 
-        $geonameRepository = $this->getEntityManager()->getRepository('Application\Model\Geoname');
+        $geonameRepository = $this->getEntityManager()->getRepository(\Application\Model\Geoname::class);
         $geoname = $geonameRepository->findOneBy(['name' => $countryName]);
         if (!$geoname) {
             throw new \Exception('No country found for name "' . $countryName . '"');
@@ -571,7 +571,7 @@ STRING;
     private function getQuestion(Questionnaire $questionnaire, Filter $filter, $alternateName)
     {
         $survey = $questionnaire->getSurvey();
-        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
+        $questionRepository = $this->getEntityManager()->getRepository(\Application\Model\Question\NumericQuestion::class);
 
         $key = \Application\Utility::getVolatileCacheKey([$survey, $filter]);
 
@@ -908,7 +908,7 @@ STRING;
                 return $this->cacheFormulas[$key];
             }
 
-            $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $ruleRepository = $this->getEntityManager()->getRepository(\Application\Model\Rule\Rule::class);
 
             // Look for existing formula (to prevent duplication)
             $rule = $ruleRepository->findOneByFormula($formula);
@@ -1019,7 +1019,7 @@ STRING;
         if (array_key_exists($key, $this->cacheFilterGeonameUsages)) {
             $filterGeonameUsage = $this->cacheFilterGeonameUsages[$key];
         } elseif ($rule->getId() && $part->getId() && $filter->getId() && $geoname->getId()) {
-            $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
+            $repository = $this->getEntityManager()->getRepository(\Application\Model\Rule\FilterGeonameUsage::class);
             $filterGeonameUsage = $repository->findOneBy([
                 'rule' => $rule,
                 'part' => $part,
@@ -1300,7 +1300,7 @@ STRING;
      */
     private function importHighFilters(array $filterSetNames, array $filters)
     {
-        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+        $filterSetRepository = $this->getEntityManager()->getRepository(\Application\Model\FilterSet::class);
         $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
         $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
         $this->getEntityManager()->flush();

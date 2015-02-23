@@ -55,7 +55,7 @@ class QuestionRepository extends AbstractChildRepository
         // Answerable questions with parts
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('question, chapter, parts')
-            ->from('Application\Model\Question\AbstractAnswerableQuestion', 'question')
+            ->from(\Application\Model\Question\AbstractAnswerableQuestion::class, 'question')
             ->join('question.survey', 'survey', Join::WITH)
             ->join('question.parts', 'parts')
             ->leftJoin('question.chapter', 'chapter')
@@ -69,7 +69,7 @@ class QuestionRepository extends AbstractChildRepository
         // Chapters (question without parts)
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('question, chapter')
-            ->from('Application\Model\Question\Chapter', 'question')
+            ->from(\Application\Model\Question\Chapter::class, 'question')
             ->join('question.survey', 'survey', Join::WITH)
             ->leftJoin('question.chapter', 'chapter')
             ->where('question.survey = :survey')
@@ -91,7 +91,7 @@ class QuestionRepository extends AbstractChildRepository
         // ChoiceQuestions with parts, isMultiple and choices
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('question, chapter, parts, choices')
-            ->from('Application\Model\Question\ChoiceQuestion', 'question')
+            ->from(\Application\Model\Question\ChoiceQuestion::class, 'question')
             ->join('question.survey', 'survey', Join::WITH)
             ->join('question.parts', 'parts')
             ->leftJoin('question.choices', 'choices')

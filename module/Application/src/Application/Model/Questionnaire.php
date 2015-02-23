@@ -356,7 +356,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
             $contexts = new \Application\Service\MultipleRoleContext($this->getSurvey());
 
             // If we try to delete a questionnaire, we must also consider the side-effect it may have on Rules that use this questionnaire
-            $repository = \Application\Module::getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $repository = \Application\Module::getEntityManager()->getRepository(\Application\Model\Rule\Rule::class);
             $rulesWithReference = $repository->getAllReferencing($this);
             foreach ($rulesWithReference as $rule) {
                 $contexts->merge($rule->getRoleContext($action));

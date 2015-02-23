@@ -674,9 +674,9 @@ class Glass extends AbstractImporter
 
     public function import()
     {
-        $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
-        $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
-        $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
+        $this->partUrban = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Urban');
+        $this->partRural = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Rural');
+        $this->partTotal = $this->getEntityManager()->getRepository(\Application\Model\Part::class)->getOrCreate('Total');
 
         $this->partOffsets = [
             3 => $this->partUrban,
@@ -684,7 +684,7 @@ class Glass extends AbstractImporter
             5 => $this->partTotal,
         ];
 
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+        $filterRepository = $this->getEntityManager()->getRepository(\Application\Model\Filter::class);
         $undefinedFilterSet = $filterRepository->findOneById(4);
         $undefinedFilterSet->setName('Undefined');
 
@@ -698,7 +698,7 @@ class Glass extends AbstractImporter
         echo PHP_EOL;
 
         // import filtersets
-        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+        $filterSetRepository = $this->getEntityManager()->getRepository(\Application\Model\FilterSet::class);
         foreach ($this->filterSets as $filterSetData) {
             $filterSetName = $filterSetData[0];
             $filterSet = $filterSetRepository->getOrCreate($filterSetName);
@@ -739,7 +739,7 @@ FilterSets linked            : $this->linkedFilterSetCount
     private function createFirstFilterSet(array $cache)
     {
         $firstFilter = reset($cache);
-        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+        $filterSetRepository = $this->getEntityManager()->getRepository(\Application\Model\FilterSet::class);
         $filterSet = $filterSetRepository->getOrCreate($firstFilter->getName());
         foreach ($firstFilter->getChildren() as $child) {
             $filterSet->addFilter($child);
@@ -782,7 +782,7 @@ FilterSets linked            : $this->linkedFilterSetCount
      */
     private function linkQuestions()
     {
-        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractAnswerableQuestion');
+        $questionRepository = $this->getEntityManager()->getRepository(\Application\Model\Question\AbstractAnswerableQuestion::class);
         foreach ($this->questions as $data) {
             list($table, $filterIndex, $questionId) = $data;
 

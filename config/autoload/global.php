@@ -22,8 +22,8 @@ return [
     'service_manager' => [
         'factories' => [
             'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
-            'Zend\Log' => 'Application\Service\LogFactory',
-            'Application\DBAL\Logging\ForwardSQLLogger' => 'Application\Service\ForwardSQLLoggerFactory',
+            'Zend\Log' => \Application\Service\LogFactory::class,
+            \Application\DBAL\Logging\ForwardSQLLogger::class => \Application\Service\ForwardSQLLoggerFactory::class,
         ],
     ],
     'session' => [

@@ -52,7 +52,7 @@ class RuleRepository extends \Application\Repository\AbstractRepository
     public function getAllReferencing(ReferencableInterface $reference)
     {
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addRootEntityFromClassMetadata('Application\Model\Rule\Rule', 'rule');
+        $rsm->addRootEntityFromClassMetadata(\Application\Model\Rule\Rule::class, 'rule');
         $native = $this->getEntityManager()->createNativeQuery('SELECT r.id, r.name, r.formula FROM rule AS r WHERE r.formula ~ :pattern', $rsm);
 
         $pattern = '{' . self::FORMULA_COMPONENT_PATTERN . $this->getObjectType($reference) . '\#' . $reference->getId() . '(?!\d)' . self::FORMULA_COMPONENT_PATTERN . '}';

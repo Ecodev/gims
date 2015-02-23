@@ -661,7 +661,7 @@ abstract class AbstractImporter
         $parent = @$cache[$definition[1]];
         $parentName = $parent ? $parent->getName() : null;
 
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+        $filterRepository = $this->getEntityManager()->getRepository(\Application\Model\Filter::class);
         $filter = $filterRepository->getOneByNames($name, $parentName);
         if (!$filter) {
             $filter = new Filter($name);

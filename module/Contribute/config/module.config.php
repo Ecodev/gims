@@ -3,10 +3,10 @@
 return [
     'controllers' => [
         'invokables' => [
-            'Contribute\Controller\Index' => 'Contribute\Controller\IndexController',
-            'Contribute\Controller\RequestRoles' => 'Contribute\Controller\RequestRolesController',
-            'Contribute\Controller\Discussion' => 'Contribute\Controller\DiscussionController',
-            'Contribute\Controller\Activity' => 'Contribute\Controller\ActivityController',
+            'Contribute\Controller\Index' => \Contribute\Controller\IndexController::class,
+            'Contribute\Controller\RequestRoles' => \Contribute\Controller\RequestRolesController::class,
+            'Contribute\Controller\Discussion' => \Contribute\Controller\DiscussionController::class,
+            'Contribute\Controller\Activity' => \Contribute\Controller\ActivityController::class,
         ],
     ],
     'view_manager' => [

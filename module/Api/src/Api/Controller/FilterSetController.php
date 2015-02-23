@@ -14,7 +14,7 @@ class FilterSetController extends AbstractRestfulController
          * modify filterset, create filters etc..
          */
         $user = $this->getAuth()->getIdentity();
-        $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('Filter editor');
+        $role = $this->getEntityManager()->getRepository(\Application\Model\Role::class)->findOneByName('Filter editor');
         $userFilterSet = new \Application\Model\UserFilterSet();
         $userFilterSet->setUser($user)->setFilterSet($newFilterSet)->setRole($role);
         $this->getEntityManager()->persist($userFilterSet);

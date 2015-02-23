@@ -33,7 +33,7 @@ trait ReferenceableInRule
         // delete the referenced object will implicitly delete our Rule
         parent::subtestMemberCanDelete();
 
-        $reloadedRule = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule')->findOneById($rule->getId());
+        $reloadedRule = $this->getEntityManager()->getRepository(\Application\Model\Rule\Rule::class)->findOneById($rule->getId());
         $this->assertTrue(is_null($reloadedRule), 'Rule should be deleted by DB trigger');
     }
 
