@@ -14,6 +14,7 @@
             "questions": [
                 {
                     "id": 22,
+                    "name": "Public tap, standpipe",
                     "alternateNames": {
                         "3": "Piped outside residence"
                     },
@@ -62,6 +63,7 @@
                 },
                 {
                     "id": 23,
+                    "name": "Tubewell, borehole",
                     "alternateNames": {
                         "3": "Tube well"
                     },
@@ -110,6 +112,7 @@
                 },
                 {
                     "id": 24,
+                    "name": "Traditional wells",
                     "alternateNames": {
                         "3": "Surface well\/Other well"
                     },
@@ -158,6 +161,7 @@
                 },
                 {
                     "id": 25,
+                    "name": "River",
                     "alternateNames": {
                         "3": "River\/stream"
                     },
@@ -206,6 +210,7 @@
                 },
                 {
                     "id": 26,
+                    "name": "Pond",
                     "alternateNames": {
                         "3": "Pond\/lake"
                     },
@@ -254,6 +259,7 @@
                 },
                 {
                     "id": 27,
+                    "name": "Other 1",
                     "alternateNames": {
                         "3": "Other"
                     },
@@ -302,6 +308,7 @@
                 },
                 {
                     "id": 28,
+                    "name": "DK\/missing",
                     "alternateNames": {
                         "3": "Missing\/DK"
                     },
@@ -350,6 +357,7 @@
                 },
                 {
                     "id": 21,
+                    "name": "Piped water into dwelling",
                     "alternateNames": {
                         "3": "Piped into residence"
                     },
@@ -398,6 +406,7 @@
                 },
                 {
                     "id": 166,
+                    "name": "to septic tank",
                     "alternateNames": {
                         "3": "Septic Tank, modern"
                     },
@@ -446,6 +455,7 @@
                 },
                 {
                     "id": 167,
+                    "name": "to pit",
                     "alternateNames": {
                         "3": "Water sealed\/slab latrine"
                     },
@@ -494,6 +504,7 @@
                 },
                 {
                     "id": 168,
+                    "name": "Traditional latrine",
                     "alternateNames": {
                         "3": "Pit latrine"
                     },
@@ -542,6 +553,7 @@
                 },
                 {
                     "id": 169,
+                    "name": "Pit latrine without slab\/open pit",
                     "alternateNames": {
                         "3": "Open latrine"
                     },
@@ -590,6 +602,7 @@
                 },
                 {
                     "id": 170,
+                    "name": "Hanging toilet\/hanging latrine",
                     "alternateNames": {
                         "3": "Hanging latrine"
                     },
@@ -638,6 +651,7 @@
                 },
                 {
                     "id": 171,
+                    "name": "No facility, bush, field ",
                     "alternateNames": {
                         "3": "No facility\/bush"
                     },
@@ -686,6 +700,7 @@
                 },
                 {
                     "id": 172,
+                    "name": "Other 1",
                     "alternateNames": {
                         "3": "Other"
                     },
@@ -861,6 +876,7 @@
             "questions": [
                 {
                     "id": 16,
+                    "name": "Tubewell, borehole",
                     "alternateNames": {
                         "2": "Tube well"
                     },
@@ -909,6 +925,7 @@
                 },
                 {
                     "id": 17,
+                    "name": "Traditional wells",
                     "alternateNames": {
                         "2": "Well"
                     },
@@ -957,6 +974,7 @@
                 },
                 {
                     "id": 18,
+                    "name": "River",
                     "alternateNames": {
                         "2": "River\/canal"
                     },
@@ -1005,6 +1023,7 @@
                 },
                 {
                     "id": 19,
+                    "name": "Pond",
                     "alternateNames": {
                         "2": "Pond"
                     },
@@ -1053,6 +1072,7 @@
                 },
                 {
                     "id": 20,
+                    "name": "Other 1",
                     "alternateNames": {
                         "2": "Unknown"
                     },
@@ -1101,6 +1121,7 @@
                 },
                 {
                     "id": 15,
+                    "name": "Tap water",
                     "alternateNames": {
                         "2": "Tap"
                     },
@@ -1149,6 +1170,7 @@
                 },
                 {
                     "id": 162,
+                    "name": "Flush\/toilets",
                     "alternateNames": {
                         "2": "Sanitary"
                     },
@@ -1197,6 +1219,7 @@
                 },
                 {
                     "id": 163,
+                    "name": "No facility, bush, field ",
                     "alternateNames": {
                         "2": "None"
                     },
@@ -1245,6 +1268,7 @@
                 },
                 {
                     "id": 164,
+                    "name": "Other 1",
                     "alternateNames": {
                         "2": "Other"
                     },
@@ -1293,6 +1317,7 @@
                 },
                 {
                     "id": 165,
+                    "name": "Other 2",
                     "alternateNames": {
                         "2": "Unknown"
                     },

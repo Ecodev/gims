@@ -33,7 +33,7 @@ class QuestionRepositoryTest extends AbstractRepository
 
         $repository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
         $reloadedQuestion = $repository->find($idQuestion);
-        $this->assertNotSame($question, $reloadedQuestion, 'question should be reloaded from database and thus be different obejct');
+        $this->assertNotSame($question, $reloadedQuestion, 'question should be reloaded from database and thus be different object');
         $this->assertEquals($alternateNames, $reloadedQuestion->getAlternateNames(), 'should be able to get the exact same JSON array from database');
     }
 }

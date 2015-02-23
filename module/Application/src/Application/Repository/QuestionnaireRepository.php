@@ -256,6 +256,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         $rsm->addFieldResult('survey', 'survey_year', 'year');
         $rsm->addJoinedEntityResult('Application\Model\Question\NumericQuestion', 'question', 'survey', 'questions');
         $rsm->addFieldResult('question', 'question_id', 'id');
+        $rsm->addFieldResult('question', 'question_name', 'name');
         $rsm->addFieldResult('question', 'question_alternate_names', 'alternateNames');
         $rsm->addFieldResult('question', 'question_is_absolute', 'isAbsolute');
         $rsm->addJoinedEntityResult('Application\Model\Filter', 'question_filter', 'question', 'filter');

@@ -15,6 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class AbstractQuestion extends \Application\Model\AbstractModel
 {
+    /**
+     * Meaningless value that should be used instead of empty array, so it
+     * is still considered as an associative and correctly converted to an
+     * object when JSONifying
+     */
+    const EMPTY_ASSOCIATIVE_ARRAY = [-1 => null];
 
     /**
      * @var integer
@@ -31,9 +37,9 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     /**
      * An array of alternate names: [questionnaireId => "my alternate name"]
      * @var array
-     * @ORM\Column(type="json_array", nullable=false, options={"default" = "[]"})
+     * @ORM\Column(type="json_array", nullable=false, options={"default" = "{""-1"":null}"})
      */
-    private $alternateNames = [];
+    private $alternateNames = self::EMPTY_ASSOCIATIVE_ARRAY;
 
     /**
      * @var Chapter
@@ -131,6 +137,10 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      */
     public function setAlternateNames(array $alternateNames)
     {
+        if (empty($alternateNames)) {
+            $alternateNames = self::EMPTY_ASSOCIATIVE_ARRAY;
+        }
+
         $this->alternateNames = $alternateNames;
 
         return $this;

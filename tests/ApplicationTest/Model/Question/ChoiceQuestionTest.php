@@ -10,7 +10,6 @@ use Application\Model\Question\ChoiceQuestion;
  */
 class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
 {
-
     public function testChoicesRelation()
     {
         $question = new ChoiceQuestion();
@@ -74,5 +73,20 @@ class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
         $this->assertFalse($question->getChoices()->contains($choice1), 'non-common question choice must be removed');
         $this->assertTrue($question->getChoices()->contains($alreadyExistingChoice), 'common question choice must be kept');
         $this->assertTrue($question->getChoices()->contains($choice2), 'new question choice must be added');
+    }
+
+    public function testAlternateNames()
+    {
+        $question = new ChoiceQuestion();
+        $this->assertNotEmpty($question->getAlternateNames(), 'It can never be empty, otherwise our JSON API would output an array instead of object and JavaScript would break miserably');
+
+        $question->setAlternateNames([]);
+        $this->assertNotEmpty($question->getAlternateNames(), 'must not be allowed to be set to empty');
+
+        $questionnaire = $this->getNewModelWithId('Application\Model\Questionnaire');
+        $question->addAlternateName($questionnaire, 'my alternate name');
+        $alternates = $question->getAlternateNames();
+        $this->assertArrayHasKey($questionnaire->getId(), $alternates);
+        $this->assertEquals('my alternate name', $alternates[$questionnaire->getId()]);
     }
 }

@@ -97,6 +97,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
             }
 
             $scope.question.put(questionFields).then(function(question) {
+                removeInvalidAlternateName(question);
                 $scope.sending = false;
                 $scope.question = question;
                 $scope.questions = question.questions;
@@ -172,6 +173,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     // Try loading question if possible...
     if ($routeParams.id) {
         Restangular.one('question', $routeParams.id).get(questionFields).then(function(question) {
+            removeInvalidAlternateName(question);
             $scope.question = question;
             $scope.survey = question.survey;
             setParentQuestions($scope.question.survey.id);
@@ -202,5 +204,17 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     var params = $location.search();
     if (params.survey !== undefined) {
         $scope.survey = Restangular.one('survey', params.survey).get().$object;
+    }
+
+    /**
+     * Remove the fake alternate name that may be present
+     * @param {object} question
+     */
+    function removeInvalidAlternateName(question) {
+        question.alternateNames = _.forEach(question.alternateNames, function(a, questionnaireId) {
+            if (questionnaireId <= 0) {
+                delete question.alternateNames[questionnaireId];
+            }
+        });
     }
 });
