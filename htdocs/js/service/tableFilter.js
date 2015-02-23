@@ -1324,13 +1324,8 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
         var deferred = $q.defer();
 
-        // If the question is new and does not have an official name use it the alternative as real one
-        var alternateName = question.alternateNames[questionnaire.id];
-        if (!question.name) {
-            question.name = alternateName;
-        }
-
         // If we deleted the alternative name, or it is the same as official one, delete the alternative
+        var alternateName = question.alternateNames[questionnaire.id];
         if (!alternateName || alternateName === question.name) {
             delete question.alternateNames[questionnaire.id];
         }
@@ -1343,10 +1338,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             question.put().then(function() {
                 propagateQuestions(questionnaire.survey, true, false);
                 question.isLoading = false;
-
-                if (!question.alternateNames[questionnaire.id]) {
-                    question.alternateNames[questionnaire.id] = question.name;
-                }
 
                 deferred.resolve();
 
