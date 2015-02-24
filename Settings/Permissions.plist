@@ -23,8 +23,6 @@
 		<string>data/session</string>
 		<key>permissions</key>
 		<string>0770</string>
-		<key>recursive</key>
-		<true/>
 	</dict>
   <!-- Make the CLI tools executable -->
 	<dict>
@@ -83,31 +81,7 @@
 	</dict>
 	<dict>
 		<key>path</key>
-		<string>bin/benchmark.php</string>
-		<key>permissions</key>
-		<string>0750</string>
-	</dict>
-	<dict>
-		<key>path</key>
 		<string>bin/build.sh</string>
-		<key>permissions</key>
-		<string>0750</string>
-	</dict>
-	<dict>
-		<key>path</key>
-		<string>bin/countries.php</string>
-		<key>permissions</key>
-		<string>0750</string>
-	</dict>
-	<dict>
-		<key>path</key>
-		<string>bin/export_actual.php</string>
-		<key>permissions</key>
-		<string>0750</string>
-	</dict>
-	<dict>
-		<key>path</key>
-		<string>bin/export_expected.php</string>
 		<key>permissions</key>
 		<string>0750</string>
 	</dict>
@@ -126,6 +100,12 @@
 	<dict>
 		<key>path</key>
 		<string>bin/install_dependencies.sh</string>
+		<key>permissions</key>
+		<string>0750</string>
+	</dict>
+	<dict>
+		<key>path</key>
+		<string>bin/live-intro</string>
 		<key>permissions</key>
 		<string>0750</string>
 	</dict>
