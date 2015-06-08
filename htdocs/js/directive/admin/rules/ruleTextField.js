@@ -26,7 +26,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                     var _session = aceEditor.getSession();
                     var _renderer = aceEditor.renderer;
                     // Options
-                    aceEditor.setReadOnly(true);
+//                    aceEditor.setReadOnly(true); // TODO this should be dynamic according to user permissions, see https://support.ecodev.ch/issues/3281
                     aceEditor.setFontSize('14px');
                     aceEditor.setShowPrintMargin(false);
                     _renderer.setShowGutter(false);
