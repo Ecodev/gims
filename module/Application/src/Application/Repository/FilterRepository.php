@@ -198,7 +198,7 @@ class FilterRepository extends AbstractRepository
                     'thematicTextColor' => Utility::getLisibleColor(isset($filter['thematicColor']) ? $filter['thematicColor'] : Utility::getColor($filter['thematicId'], 100)),
                     'filterSorting' => $filter['filterSorting'],
                     'thematicSorting' => $filter['thematicSorting'],
-                    'width' => 80,
+                    'width' => 90,
                 ];
             }
         }
