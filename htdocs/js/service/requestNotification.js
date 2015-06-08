@@ -46,6 +46,7 @@ angular.module('myApp.services').provider('requestNotification', function() {
         };
 
         this.fireResponseError = function(response) {
+            requestCounter.decrement();
             angular.forEach(onResponseErrorListeners, function(listener) {
                 listener(response);
             });
