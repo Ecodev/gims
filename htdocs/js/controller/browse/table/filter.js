@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, Restangular, $q, $rootScope, requestNotification, $filter, questionnairesStatus, TableFilter) {
+angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, Restangular, $q, $rootScope, requestNotification, $filter, questionnairesStatus, TableFilter, $timeout) {
     'use strict';
 
     /**************************************************************************/
@@ -47,7 +47,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         TableFilter.syncScroll();
 
         $scope.$watch('expandSelection', function() {
-            TableFilter.resizeContent();
+            $timeout(TableFilter.resizeContent);
         });
     };
 
