@@ -273,8 +273,8 @@
                                                                    tooltip-placement="right"
                                                                    tooltip="Include filter for all questionnaires"></i>
 
-                                                                <span class="dropdown" ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages">
-                                                                    <i class="fa fa-lg fa-gims-rule dropdown-toggle" style="color:{{findById(tabs.filters, hFilterId).genericColor}}" tooltip-placement="right" tooltip="Show rules"></i>
+                                                                <span class="dropdown" dropdown ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages">
+                                                                    <i class="fa fa-lg fa-gims-rule dropdown-toggle" dropdown-toggle style="color:{{findById(tabs.filters, hFilterId).genericColor}}" tooltip-placement="right" tooltip="Show rules"></i>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li class="dropdown-header">Rules used for computation</li>
                                                                         <li ng-repeat="usage in indexedElements[pointSelected.questionnaire].filters[key].usages">
