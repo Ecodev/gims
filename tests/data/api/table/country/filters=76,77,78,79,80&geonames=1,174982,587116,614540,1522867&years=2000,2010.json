@@ -46,7 +46,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 100,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f76p1a",
@@ -61,7 +61,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 100,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f78p1",
@@ -76,7 +76,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 102,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f78p1a",
@@ -91,7 +91,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 102,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f80p1",
@@ -106,7 +106,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 103,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f80p1a",
@@ -121,7 +121,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 103,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f79p1",
@@ -136,7 +136,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 104,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f79p1a",
@@ -151,7 +151,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 104,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f77p1",
@@ -166,7 +166,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 105,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f77p1a",
@@ -181,7 +181,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 105,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f76p2",
@@ -196,7 +196,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 100,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f76p2a",
@@ -211,7 +211,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 100,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f78p2",
@@ -226,7 +226,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 102,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f78p2a",
@@ -241,7 +241,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 102,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f80p2",
@@ -256,7 +256,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 103,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f80p2a",
@@ -271,7 +271,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 103,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f79p2",
@@ -286,7 +286,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 104,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f79p2a",
@@ -301,7 +301,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 104,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f77p2",
@@ -316,7 +316,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 105,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f77p2a",
@@ -331,7 +331,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 105,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f76p3",
@@ -346,7 +346,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 100,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f76p3a",
@@ -361,7 +361,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 100,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f78p3",
@@ -376,7 +376,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 102,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f78p3a",
@@ -391,7 +391,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 102,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f80p3",
@@ -406,7 +406,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 103,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f80p3a",
@@ -421,7 +421,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 103,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f79p3",
@@ -436,7 +436,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 104,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f79p3a",
@@ -451,7 +451,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 104,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f77p3",
@@ -466,7 +466,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 105,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f77p3a",
@@ -481,7 +481,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 105,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         }
     ],
     "data": [

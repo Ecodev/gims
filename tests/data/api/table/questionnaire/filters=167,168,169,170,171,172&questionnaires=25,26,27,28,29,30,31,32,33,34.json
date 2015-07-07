@@ -33,7 +33,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 200,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f168p1",
@@ -48,7 +48,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 201,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f172p1",
@@ -63,7 +63,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 202,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f171p1",
@@ -78,7 +78,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 203,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f170p1",
@@ -93,7 +93,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 204,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f169p1",
@@ -108,7 +108,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 205,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f167p2",
@@ -123,7 +123,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 200,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f168p2",
@@ -138,7 +138,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 201,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f172p2",
@@ -153,7 +153,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 202,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f171p2",
@@ -168,7 +168,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 203,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f170p2",
@@ -183,7 +183,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 204,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f169p2",
@@ -198,7 +198,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 205,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f167p3",
@@ -213,7 +213,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 200,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f168p3",
@@ -228,7 +228,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 201,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f172p3",
@@ -243,7 +243,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 202,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f171p3",
@@ -258,7 +258,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 203,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f170p3",
@@ -273,7 +273,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 204,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         },
         {
             "field": "f169p3",
@@ -288,7 +288,7 @@
             "thematicTextColor": "#FFFFFF",
             "filterSorting": 205,
             "thematicSorting": 0,
-            "width": 80
+            "width": 90
         }
     ],
     "data": [
