@@ -166,7 +166,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
             'name',
             'email',
             'state',
-            'lastLogin'
+            'lastLogin',
         ]);
     }
 
@@ -222,6 +222,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         $this->password = $password;
         $this->dateTokenGenerated = null;
         $this->token = null;
+        $this->setState(1);
 
         return $this;
     }

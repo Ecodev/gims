@@ -158,30 +158,6 @@ class UserController extends AbstractRestfulController
         }
     }
 
-    public function changePasswordAction()
-    {
-        $token = $this->getRequest()->getQuery()->get('token');
-        $pass1 = $this->getRequest()->getQuery()->get('pass1');
-        $pass2 = $this->getRequest()->getQuery()->get('pass2');
-        $user = $this->getRepository()->findOneByToken($token);
-
-        if ($user) {
-            if ($pass1 == $pass2) {
-                $user->setState(1);
-                $user->setPassword($pass1);
-                $this->getEntityManager()->flush();
-
-                return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
-            } else {
-                return new JsonModel(['message' => "Passwords don't match."]);
-            }
-        } else {
-            $this->getResponse()->setStatusCode(404);
-
-            return new JsonModel(['message' => 'User has not been found']);
-        }
-    }
-
     /**
      * Check if token is younger than 15 min.
      * @return JsonModel

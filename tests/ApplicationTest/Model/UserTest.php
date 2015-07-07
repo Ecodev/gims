@@ -7,6 +7,14 @@ namespace ApplicationTest\Model;
  */
 class UserTest extends AbstractModel
 {
+    public function testState()
+    {
+        $user = new \Application\Model\User();
+        $this->assertEquals(0, $user->getState(), 'new user have not confirmed email');
+
+        $user->setPassword('foo');
+        $this->assertEquals(1, $user->getState(), 'if password was changed, email is considered confirmed');
+    }
 
     public function testToken()
     {
