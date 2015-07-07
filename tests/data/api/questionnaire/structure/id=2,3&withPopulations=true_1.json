@@ -1,868 +1,5 @@
 [
     {
-        "id": 3,
-        "status": "published",
-        "comments": "",
-        "geoname": {
-            "id": 1210997,
-            "name": "Bangladesh"
-        },
-        "survey": {
-            "id": 3,
-            "code": "DHS94",
-            "year": 1994,
-            "questions": [
-                {
-                    "id": 22,
-                    "name": "Public tap, standpipe",
-                    "alternateNames": {
-                        "3": "Piped outside residence"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 8
-                    },
-                    "answers": [
-                        {
-                            "id": 22,
-                            "valuePercent": 0.101,
-                            "valueAbsolute": 2528230.586,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 23,
-                            "valuePercent": 0.002,
-                            "valueAbsolute": 184675.012,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 24,
-                            "valuePercent": 0.013,
-                            "valueAbsolute": 1525803.396,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 23,
-                    "name": "Tubewell, borehole",
-                    "alternateNames": {
-                        "3": "Tube well"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 25
-                    },
-                    "answers": [
-                        {
-                            "id": 25,
-                            "valuePercent": 0.62,
-                            "valueAbsolute": 15519831.32,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 26,
-                            "valuePercent": 0.91,
-                            "valueAbsolute": 84027130.45999999,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 27,
-                            "valuePercent": 0.877,
-                            "valueAbsolute": 102933044.484,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 24,
-                    "name": "Traditional wells",
-                    "alternateNames": {
-                        "3": "Surface well\/Other well"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 29
-                    },
-                    "answers": [
-                        {
-                            "id": 28,
-                            "valuePercent": 0.008,
-                            "valueAbsolute": 200255.888,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 29,
-                            "valuePercent": 0.044,
-                            "valueAbsolute": 4062850.264,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 30,
-                            "valuePercent": 0.04,
-                            "valueAbsolute": 4694779.68,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 25,
-                    "name": "River",
-                    "alternateNames": {
-                        "3": "River\/stream"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 60
-                    },
-                    "answers": [
-                        {
-                            "id": 31,
-                            "valuePercent": 0.001,
-                            "valueAbsolute": 25031.986,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 32,
-                            "valuePercent": 0.008,
-                            "valueAbsolute": 738700.048,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 33,
-                            "valuePercent": 0.007,
-                            "valueAbsolute": 821586.444,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 26,
-                    "name": "Pond",
-                    "alternateNames": {
-                        "3": "Pond\/lake"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 63
-                    },
-                    "answers": [
-                        {
-                            "id": 34,
-                            "valuePercent": 0.004,
-                            "valueAbsolute": 100127.944,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 35,
-                            "valuePercent": 0.031,
-                            "valueAbsolute": 2862462.686,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 36,
-                            "valuePercent": 0.028,
-                            "valueAbsolute": 3286345.776,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 27,
-                    "name": "Other 1",
-                    "alternateNames": {
-                        "3": "Other"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 73
-                    },
-                    "answers": [
-                        {
-                            "id": 38,
-                            "valuePercent": 0.001,
-                            "valueAbsolute": 92337.50599999999,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 39,
-                            "valuePercent": 0.001,
-                            "valueAbsolute": 117369.492,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        },
-                        {
-                            "id": 37,
-                            "valuePercent": 0,
-                            "valueAbsolute": 0,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 28,
-                    "name": "DK\/missing",
-                    "alternateNames": {
-                        "3": "Missing\/DK"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 75
-                    },
-                    "answers": [
-                        {
-                            "id": 40,
-                            "valuePercent": 0,
-                            "valueAbsolute": 0,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 41,
-                            "valuePercent": 0.001,
-                            "valueAbsolute": 92337.50599999999,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 42,
-                            "valuePercent": 0.001,
-                            "valueAbsolute": 117369.492,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 21,
-                    "name": "Piped water into dwelling",
-                    "alternateNames": {
-                        "3": "Piped into residence"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 6
-                    },
-                    "answers": [
-                        {
-                            "id": 19,
-                            "valuePercent": 0.267,
-                            "valueAbsolute": 6683540.262,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 20,
-                            "valuePercent": 0.003,
-                            "valueAbsolute": 277012.518,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 21,
-                            "valuePercent": 0.033,
-                            "valueAbsolute": 3873193.236,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 166,
-                    "name": "to septic tank",
-                    "alternateNames": {
-                        "3": "Septic Tank, modern"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 90
-                    },
-                    "answers": [
-                        {
-                            "id": 405,
-                            "valuePercent": 0.494,
-                            "valueAbsolute": 12365801.084,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 406,
-                            "valuePercent": 0.042,
-                            "valueAbsolute": 3878175.252,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 407,
-                            "valuePercent": 0.093,
-                            "valueAbsolute": 10915362.756,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 167,
-                    "name": "to pit",
-                    "alternateNames": {
-                        "3": "Water sealed\/slab latrine"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 110
-                    },
-                    "answers": [
-                        {
-                            "id": 408,
-                            "valuePercent": 0.228,
-                            "valueAbsolute": 5707292.808,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 409,
-                            "valuePercent": 0.148,
-                            "valueAbsolute": 13665950.888,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 410,
-                            "valuePercent": 0.157,
-                            "valueAbsolute": 18427010.244,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 168,
-                    "name": "Traditional latrine",
-                    "alternateNames": {
-                        "3": "Pit latrine"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 129
-                    },
-                    "answers": [
-                        {
-                            "id": 411,
-                            "valuePercent": 0.08400000000000001,
-                            "valueAbsolute": 2102686.824,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 412,
-                            "valuePercent": 0.166,
-                            "valueAbsolute": 15328025.996,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 413,
-                            "valuePercent": 0.157,
-                            "valueAbsolute": 18427010.244,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 169,
-                    "name": "Pit latrine without slab\/open pit",
-                    "alternateNames": {
-                        "3": "Open latrine"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 130
-                    },
-                    "answers": [
-                        {
-                            "id": 414,
-                            "valuePercent": 0.091,
-                            "valueAbsolute": 2277910.726,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 415,
-                            "valuePercent": 0.207,
-                            "valueAbsolute": 19113863.742,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 416,
-                            "valuePercent": 0.193,
-                            "valueAbsolute": 22652311.956,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 170,
-                    "name": "Hanging toilet\/hanging latrine",
-                    "alternateNames": {
-                        "3": "Hanging latrine"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 131
-                    },
-                    "answers": [
-                        {
-                            "id": 417,
-                            "valuePercent": 0.049,
-                            "valueAbsolute": 1226567.314,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 418,
-                            "valuePercent": 0.1,
-                            "valueAbsolute": 9233750.6,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 419,
-                            "valuePercent": 0.094,
-                            "valueAbsolute": 11032732.248,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 171,
-                    "name": "No facility, bush, field ",
-                    "alternateNames": {
-                        "3": "No facility\/bush"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 156
-                    },
-                    "answers": [
-                        {
-                            "id": 420,
-                            "valuePercent": 0.048,
-                            "valueAbsolute": 1201535.328,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 421,
-                            "valuePercent": 0.334,
-                            "valueAbsolute": 30840727.004,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 422,
-                            "valuePercent": 0.302,
-                            "valueAbsolute": 35445586.584,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 172,
-                    "name": "Other 1",
-                    "alternateNames": {
-                        "3": "Other"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 158
-                    },
-                    "answers": [
-                        {
-                            "id": 423,
-                            "valuePercent": 0.006,
-                            "valueAbsolute": 150191.916,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 424,
-                            "valuePercent": 0.004,
-                            "valueAbsolute": 369350.024,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 425,
-                            "valuePercent": 0.004,
-                            "valueAbsolute": 469477.968,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        "name": "DHS94 - Bangladesh",
-        "populations": [],
-        "hasFilterQuestionnaireUsages": {
-            "79": {
-                "1": {
-                    "first": true
-                },
-                "3": {
-                    "second": true,
-                    "first": true
-                },
-                "2": {
-                    "first": true
-                }
-            },
-            "168": {
-                "1": {
-                    "first": true
-                },
-                "3": {
-                    "second": true,
-                    "first": true
-                },
-                "2": {
-                    "first": true
-                }
-            },
-            "78": {
-                "2": {
-                    "first": true
-                },
-                "3": {
-                    "first": true,
-                    "second": true
-                },
-                "1": {
-                    "first": true
-                }
-            },
-            "167": {
-                "2": {
-                    "first": true
-                },
-                "1": {
-                    "first": true
-                },
-                "3": {
-                    "second": true
-                }
-            },
-            "76": {
-                "2": {
-                    "first": true
-                },
-                "1": {
-                    "first": true
-                },
-                "3": {
-                    "second": true
-                }
-            },
-            "80": {
-                "2": {
-                    "first": true
-                },
-                "3": {
-                    "first": true,
-                    "second": true
-                },
-                "1": {
-                    "first": true
-                }
-            },
-            "170": {
-                "3": {
-                    "second": true
-                }
-            },
-            "171": {
-                "1": {
-                    "first": true
-                },
-                "3": {
-                    "second": true,
-                    "first": true
-                },
-                "2": {
-                    "first": true
-                }
-            },
-            "77": {
-                "2": {
-                    "first": true
-                },
-                "3": {
-                    "second": true
-                },
-                "1": {
-                    "first": true
-                }
-            },
-            "172": {
-                "3": {
-                    "second": true
-                }
-            },
-            "169": {
-                "3": {
-                    "second": true
-                }
-            }
-        }
-    },
-    {
         "id": 2,
         "status": "published",
         "comments": "Ipums Int.\n\n[Water] Number of people covered by the questionnaire:\n* Urban: 20592030\n* Rural: 85217010\n* Total: 105809040\n\n[Water] Total population:\n* Urban: 20592030\n* Rural: 85217010\n* Total: 105809040",
@@ -1370,88 +507,93 @@
         "name": "CEN91 - Bangladesh",
         "populations": [],
         "hasFilterQuestionnaireUsages": {
-            "168": {
-                "3": {
-                    "second": true,
-                    "first": true
-                },
+            "76": {
                 "1": {
                     "first": true
                 },
-                "2": {
-                    "first": true
-                }
-            },
-            "78": {
                 "2": {
                     "first": true
                 },
                 "3": {
                     "first": true,
                     "second": true
-                },
-                "1": {
-                    "first": true
-                }
-            },
-            "79": {
-                "3": {
-                    "second": true,
-                    "first": true
-                },
-                "1": {
-                    "first": true
-                },
-                "2": {
-                    "first": true
                 }
             },
             "77": {
-                "3": {
-                    "first": true,
-                    "second": true
-                },
-                "2": {
-                    "first": true
-                },
-                "1": {
-                    "first": true
-                }
-            },
-            "171": {
-                "3": {
-                    "second": true,
-                    "first": true
-                },
                 "1": {
                     "first": true
                 },
-                "2": {
-                    "first": true
-                }
-            },
-            "76": {
                 "2": {
                     "first": true
                 },
                 "3": {
                     "first": true,
                     "second": true
-                },
+                }
+            },
+            "78": {
                 "1": {
                     "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
+                }
+            },
+            "79": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
                 }
             },
             "80": {
+                "1": {
+                    "first": true
+                },
                 "2": {
                     "first": true
                 },
                 "3": {
                     "first": true,
                     "second": true
-                },
+                }
+            },
+            "167": {
                 "1": {
                     "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
+                }
+            },
+            "168": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
+                }
+            },
+            "169": {
+                "3": {
+                    "second": true
                 }
             },
             "170": {
@@ -1459,20 +601,878 @@
                     "second": true
                 }
             },
-            "167": {
+            "171": {
+                "1": {
+                    "first": true
+                },
                 "2": {
                     "first": true
                 },
                 "3": {
                     "first": true,
                     "second": true
+                }
+            },
+            "172": {
+                "3": {
+                    "second": true
+                }
+            }
+        }
+    },
+    {
+        "id": 3,
+        "status": "published",
+        "comments": "",
+        "geoname": {
+            "id": 1210997,
+            "name": "Bangladesh"
+        },
+        "survey": {
+            "id": 3,
+            "code": "DHS94",
+            "year": 1994,
+            "questions": [
+                {
+                    "id": 168,
+                    "name": "Traditional latrine",
+                    "alternateNames": {
+                        "3": "Pit latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 129
+                    },
+                    "answers": [
+                        {
+                            "id": 411,
+                            "valuePercent": 0.08400000000000001,
+                            "valueAbsolute": 2102686.824,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 412,
+                            "valuePercent": 0.166,
+                            "valueAbsolute": 15328025.996,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 413,
+                            "valuePercent": 0.157,
+                            "valueAbsolute": 18427010.244,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
                 },
+                {
+                    "id": 169,
+                    "name": "Pit latrine without slab\/open pit",
+                    "alternateNames": {
+                        "3": "Open latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 130
+                    },
+                    "answers": [
+                        {
+                            "id": 414,
+                            "valuePercent": 0.091,
+                            "valueAbsolute": 2277910.726,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 415,
+                            "valuePercent": 0.207,
+                            "valueAbsolute": 19113863.742,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 416,
+                            "valuePercent": 0.193,
+                            "valueAbsolute": 22652311.956,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 22,
+                    "name": "Public tap, standpipe",
+                    "alternateNames": {
+                        "3": "Piped outside residence"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 8
+                    },
+                    "answers": [
+                        {
+                            "id": 22,
+                            "valuePercent": 0.101,
+                            "valueAbsolute": 2528230.586,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 23,
+                            "valuePercent": 0.002,
+                            "valueAbsolute": 184675.012,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 24,
+                            "valuePercent": 0.013,
+                            "valueAbsolute": 1525803.396,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 171,
+                    "name": "No facility, bush, field ",
+                    "alternateNames": {
+                        "3": "No facility\/bush"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 156
+                    },
+                    "answers": [
+                        {
+                            "id": 420,
+                            "valuePercent": 0.048,
+                            "valueAbsolute": 1201535.328,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 421,
+                            "valuePercent": 0.334,
+                            "valueAbsolute": 30840727.004,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 422,
+                            "valuePercent": 0.302,
+                            "valueAbsolute": 35445586.584,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 172,
+                    "name": "Other 1",
+                    "alternateNames": {
+                        "3": "Other"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 158
+                    },
+                    "answers": [
+                        {
+                            "id": 423,
+                            "valuePercent": 0.006,
+                            "valueAbsolute": 150191.916,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 424,
+                            "valuePercent": 0.004,
+                            "valueAbsolute": 369350.024,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 425,
+                            "valuePercent": 0.004,
+                            "valueAbsolute": 469477.968,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 170,
+                    "name": "Hanging toilet\/hanging latrine",
+                    "alternateNames": {
+                        "3": "Hanging latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 131
+                    },
+                    "answers": [
+                        {
+                            "id": 417,
+                            "valuePercent": 0.049,
+                            "valueAbsolute": 1226567.314,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 418,
+                            "valuePercent": 0.1,
+                            "valueAbsolute": 9233750.6,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 419,
+                            "valuePercent": 0.094,
+                            "valueAbsolute": 11032732.248,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 23,
+                    "name": "Tubewell, borehole",
+                    "alternateNames": {
+                        "3": "Tube well"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 25
+                    },
+                    "answers": [
+                        {
+                            "id": 25,
+                            "valuePercent": 0.62,
+                            "valueAbsolute": 15519831.32,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 26,
+                            "valuePercent": 0.91,
+                            "valueAbsolute": 84027130.45999999,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 27,
+                            "valuePercent": 0.877,
+                            "valueAbsolute": 102933044.484,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 24,
+                    "name": "Traditional wells",
+                    "alternateNames": {
+                        "3": "Surface well\/Other well"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 29
+                    },
+                    "answers": [
+                        {
+                            "id": 28,
+                            "valuePercent": 0.008,
+                            "valueAbsolute": 200255.888,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 29,
+                            "valuePercent": 0.044,
+                            "valueAbsolute": 4062850.264,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 30,
+                            "valuePercent": 0.04,
+                            "valueAbsolute": 4694779.68,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 25,
+                    "name": "River",
+                    "alternateNames": {
+                        "3": "River\/stream"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 60
+                    },
+                    "answers": [
+                        {
+                            "id": 31,
+                            "valuePercent": 0.001,
+                            "valueAbsolute": 25031.986,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 32,
+                            "valuePercent": 0.008,
+                            "valueAbsolute": 738700.048,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 33,
+                            "valuePercent": 0.007,
+                            "valueAbsolute": 821586.444,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 26,
+                    "name": "Pond",
+                    "alternateNames": {
+                        "3": "Pond\/lake"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 63
+                    },
+                    "answers": [
+                        {
+                            "id": 34,
+                            "valuePercent": 0.004,
+                            "valueAbsolute": 100127.944,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 35,
+                            "valuePercent": 0.031,
+                            "valueAbsolute": 2862462.686,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 36,
+                            "valuePercent": 0.028,
+                            "valueAbsolute": 3286345.776,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 27,
+                    "name": "Other 1",
+                    "alternateNames": {
+                        "3": "Other"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 73
+                    },
+                    "answers": [
+                        {
+                            "id": 37,
+                            "valuePercent": 0,
+                            "valueAbsolute": 0,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 38,
+                            "valuePercent": 0.001,
+                            "valueAbsolute": 92337.50599999999,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 39,
+                            "valuePercent": 0.001,
+                            "valueAbsolute": 117369.492,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 28,
+                    "name": "DK\/missing",
+                    "alternateNames": {
+                        "3": "Missing\/DK"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 75
+                    },
+                    "answers": [
+                        {
+                            "id": 40,
+                            "valuePercent": 0,
+                            "valueAbsolute": 0,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 41,
+                            "valuePercent": 0.001,
+                            "valueAbsolute": 92337.50599999999,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 42,
+                            "valuePercent": 0.001,
+                            "valueAbsolute": 117369.492,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 21,
+                    "name": "Piped water into dwelling",
+                    "alternateNames": {
+                        "3": "Piped into residence"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 6
+                    },
+                    "answers": [
+                        {
+                            "id": 19,
+                            "valuePercent": 0.267,
+                            "valueAbsolute": 6683540.262,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 20,
+                            "valuePercent": 0.003,
+                            "valueAbsolute": 277012.518,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 21,
+                            "valuePercent": 0.033,
+                            "valueAbsolute": 3873193.236,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 166,
+                    "name": "to septic tank",
+                    "alternateNames": {
+                        "3": "Septic Tank, modern"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 90
+                    },
+                    "answers": [
+                        {
+                            "id": 405,
+                            "valuePercent": 0.494,
+                            "valueAbsolute": 12365801.084,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 406,
+                            "valuePercent": 0.042,
+                            "valueAbsolute": 3878175.252,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 407,
+                            "valuePercent": 0.093,
+                            "valueAbsolute": 10915362.756,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 167,
+                    "name": "to pit",
+                    "alternateNames": {
+                        "3": "Water sealed\/slab latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 110
+                    },
+                    "answers": [
+                        {
+                            "id": 408,
+                            "valuePercent": 0.228,
+                            "valueAbsolute": 5707292.808,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 409,
+                            "valuePercent": 0.148,
+                            "valueAbsolute": 13665950.888,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 410,
+                            "valuePercent": 0.157,
+                            "valueAbsolute": 18427010.244,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "name": "DHS94 - Bangladesh",
+        "populations": [],
+        "hasFilterQuestionnaireUsages": {
+            "76": {
                 "1": {
                     "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "second": true
+                }
+            },
+            "77": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "second": true
+                }
+            },
+            "78": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
+                }
+            },
+            "79": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
+                }
+            },
+            "80": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
+                }
+            },
+            "167": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "second": true
+                }
+            },
+            "168": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
+                    "second": true
                 }
             },
             "169": {
                 "3": {
+                    "second": true
+                }
+            },
+            "170": {
+                "3": {
+                    "second": true
+                }
+            },
+            "171": {
+                "1": {
+                    "first": true
+                },
+                "2": {
+                    "first": true
+                },
+                "3": {
+                    "first": true,
                     "second": true
                 }
             },

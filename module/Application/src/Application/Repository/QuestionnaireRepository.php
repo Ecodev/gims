@@ -270,6 +270,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             LEFT JOIN filter AS question_filter ON (question_filter.id = question.filter_id)
 
             WHERE questionnaire.id IN (:questionnaires)
+            ORDER BY questionnaire.id
             ', $rsm);
 
         $qb1->setParameters(['questionnaires' => $questionnaireIds]);
@@ -303,6 +304,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             SELECT id, value_percent, value_absolute, quality, questionnaire_id, question_id, part_id
             FROM answer
             WHERE answer.questionnaire_id IN (:questionnaires)
+            ORDER BY answer.id
             ', $rsm);
 
         $qb->setParameters(['questionnaires' => $questionnaireIds]);
@@ -335,6 +337,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             FROM filter_questionnaire_usage
             WHERE questionnaire_id IN (:questionnaires)
             GROUP BY questionnaire_id, filter_id, part_id, is_second_step
+            ORDER BY questionnaire_id, filter_id, part_id, is_second_step
         ', $rsm);
 
         $qb->setParameters(['questionnaires' => $questionnaireIds]);
@@ -367,6 +370,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             SELECT id, year, population, part_id, questionnaire_id
             FROM population
             WHERE questionnaire_id IN (:questionnaires)
+            ORDER BY population.id
         ', $rsm);
 
         $qb->setParameters(['questionnaires' => $questionnaireIds]);
