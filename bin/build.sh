@@ -51,7 +51,7 @@ echo "Updating webdriver..."
 $DEPLOY_USER_SUDO ./node_modules/.bin/webdriver-manager update
 
 echo "Updating all PHP dependencies via composer..."
-composer install --dev --optimize-autoloader
+composer install --optimize-autoloader
 
 echo "Updating database..."
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction
