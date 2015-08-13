@@ -53,5 +53,5 @@ return [
     ],
 
     'emailOverride' => 'your@email.com',
-    'domain' => 'gims.lan',
+    'domain' => 'gimsinitiative.lan',
 ];

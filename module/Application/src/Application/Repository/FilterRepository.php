@@ -187,6 +187,7 @@ class FilterRepository extends AbstractRepository
             foreach ($parts as $part) {
                 $result[] = [
                     'field' => 'f' . $filter['filterId'] . 'p' . $part->getId(),
+                    'id' => $filter['filterId'],
                     'part' => $part->getName(),
                     'partId' => $part->getId(),
                     'displayName' => $filterAcronym,
@@ -212,7 +213,7 @@ class FilterRepository extends AbstractRepository
     {
         if ($c1['thematicSorting'] == $c2['thematicSorting']) {
             if ($c1['partId'] == $c2['partId']) {
-                return $c1['filterSorting'] - $c2['filterSorting'];
+                return $c1['id'] - $c2['id'];
             }
 
             return strcmp($c1['partId'], $c2['partId']);
