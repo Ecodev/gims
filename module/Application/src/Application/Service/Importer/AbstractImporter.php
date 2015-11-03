@@ -6,7 +6,6 @@ use Application\Model\Filter;
 
 abstract class AbstractImporter
 {
-
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
     use \Application\Traits\EntityManagerAware;
 
@@ -175,8 +174,8 @@ abstract class AbstractImporter
                             [5, '=Piped onto premisesURBAN'],
                         ],
                         'popHigherThanTotal' => [
-                            [3, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, IF(AND(ISNUMBER(Total improved), NOT(ISNUMBER({self}))), Piped onto premisesLATER, {self}))'],
-                            [4, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, IF(AND(ISNUMBER(Total improved), NOT(ISNUMBER({self}))), Piped onto premisesLATER, {self}))'],
+                            [3, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premisesLATER), NOT(ISNUMBER({self}))), Piped onto premisesLATER, {self}))'],
+                            [4, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premisesLATER), NOT(ISNUMBER({self}))), Piped onto premisesLATER, {self}))'],
                             [5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'],
                         ],
                         'Tunisia' => [

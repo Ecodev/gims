@@ -7,7 +7,6 @@ namespace ApplicationTest\Service\Syntax;
  */
 class ParserTest extends \ApplicationTest\Controller\AbstractController
 {
-
     /**
      * Create a stub for the FilterRepository class with predetermined values, so we don't have to mess with database
      * @return \Application\Repository\FilterRepository
@@ -220,7 +219,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
                 'part' => [
                     'id' => 1,
                     'name' => 'test part',
-                ]
+                ],
             ],
             [
                 'type' => 'text',
@@ -236,5 +235,33 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals('blue', $actuals[1]['highlightColor']);
         $this->assertEquals('red', $actuals[3]['highlightColor'], 'different tokens must have different colors');
         $this->assertEquals('blue', $actuals[5]['highlightColor'], 'identical tokens must have identical colors');
+    }
+
+    public function computeExcelFormulaProvider()
+    {
+        return [
+            ['=FALSE', null],
+            ['=""', null],
+            ['=IF(FALSE, )', null],
+            ['=IF(FALSE, NULL, NULL)', null],
+
+            // Those two last cases are very weird but correct according to
+            // official Excel documentation. However it is very annoying in the
+            // context of GIMS and that means that we should always check that
+            // returned value in case of TRUE is a number, otherwise we will get
+            // 0 and that will confuse GIMS and lead wrong results.
+            ['=IF(TRUE, )', 0],
+            ['=IF(TRUE, NULL, NULL)', 0],
+        ];
+    }
+
+    /**
+     * @dataProvider computeExcelFormulaProvider
+     */
+    public function testComputeExcelFormula($formula, $expected)
+    {
+        $parser = new \Application\Service\Syntax\Parser();
+        $result = $parser->computeExcelFormula($formula);
+        $this->assertSame($result, $expected);
     }
 }
