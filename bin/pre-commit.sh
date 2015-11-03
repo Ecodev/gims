@@ -37,7 +37,7 @@ if [ "$files" != "" ]; then
 
     # Run php-cs-fixer validation before commit
     for file in ${files}; do
-        php-cs-fixer fix --dry-run --verbose --diff --config-file .php_cs ${file}
+        php-cs-fixer fix --verbose --diff --config-file .php_cs ${file}
         if [ $? -ne 0 ]; then
             pass=false
         fi
