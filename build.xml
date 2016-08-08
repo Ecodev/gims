@@ -141,7 +141,7 @@ ORDER BY S.relname;&quot; | grep -oE &quot;SELECT.*;&quot; | sed 's/\(.*\)/&quot
         </if>
 
         <echo message="TEST_GROUP: ${group_argument}" />
-        <exec command="cd tests/ ; ../vendor/bin/phpunit ${group_argument} --coverage-clover ../data/logs/tests/coverage-clover.xml" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <exec command="./vendor/bin/phpunit ${group_argument} --coverage-clover ./data/logs/tests/coverage-clover.xml" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="karma-unit" depends="build">

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="Bootstrap.php" colors="true">
+<phpunit bootstrap="./tests/Bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="application">
-            <directory>./ApplicationTest</directory>
+            <directory>./tests/ApplicationTest</directory>
         </testsuite>
         <testsuite name="api">
-            <directory>./ApiTest</directory>
+            <directory>./tests/ApiTest</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <!-- Include only our own code for code coverage statistics -->
-            <directory>../module</directory>
+            <directory>./module</directory>
         </whitelist>
     </filter>
 
     <logging>
-        <!--<log type="coverage-html" target="../data/logs/tests/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
+        <!--<log type="coverage-html" target="./data/logs/tests/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
     </logging>
 
     <listeners>
@@ -38,7 +38,7 @@
             <arguments>
                 <object class="PHPUnit\Runner\CleverAndSmart\Storage\Sqlite3Storage">
                     <arguments>
-                        <string>../data/logs/tests/phpunit-cas.db</string>
+                        <string>./data/logs/tests/phpunit-cas.db</string>
                     </arguments>
                 </object>
             </arguments>
