@@ -20,8 +20,7 @@ thus providing valuable feedback.
 Server architecture
 ^^^^^^^^^^^^^^^^^^^
 
-On the server side, data is stored in a **PostgreSQL database** with **PostGIS
-extension**, one of the leading projects for geospatial data. The application
+On the server side, data is stored in a **MariaDB database**. The application
 itself is developed in **PHP**, a very widely used programming language for
 web servers. This gives us access to several well-known and robust libraries.
 

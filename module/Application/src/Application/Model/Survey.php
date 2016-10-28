@@ -24,7 +24,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @var string
      *
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false, options={"default" = ""})
      */
     private $code;
 
@@ -65,14 +65,14 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateStart;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateEnd;
 

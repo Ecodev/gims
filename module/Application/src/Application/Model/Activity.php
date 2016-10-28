@@ -22,9 +22,9 @@ class Activity extends AbstractModel
      * message to end-user. Those data must be self-contained, because objects
      * may have been deleted.
      * @var array
-     * @ORM\Column(type="json_array", nullable=false, options={"default" = "{}"})
+     * @ORM\Column(type="json_array", nullable=false)
      */
-    private $data;
+    private $data = [];
 
     /**
      * @var integer
@@ -41,7 +41,7 @@ class Activity extends AbstractModel
     /**
      * An array of changed properties
      * @var array
-     * @ORM\Column(type="json_array", nullable=false, options={"default" = "{}"})
+     * @ORM\Column(type="json_array", nullable=false)
      */
     private $changes = [];
 

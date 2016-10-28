@@ -30,14 +30,14 @@ abstract class AbstractModel
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateCreated;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateModified;
 

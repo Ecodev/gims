@@ -12,12 +12,12 @@ return [
     'doctrine' => [
         'connection' => [
             'orm_default' => [
-                'driverClass' => 'Doctrine\DBAL\Driver\PDOPgSql\Driver',
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
                 'params' => [
                     'host' => 'localhost',
-                    'user' => 'postgres',
+                    'user' => 'gims',
                     'dbname' => 'gims',
-                    'port' => 5432,
+                    'port' => 3306,
                 ],
                 'doctrine_type_mappings' => [
                     'geometry' => 'geometry',
@@ -26,6 +26,7 @@ return [
                     'linestring' => 'linestring',
                     'questionnaire_status' => 'questionnaire_status',
                     'survey_type' => 'survey_type',
+                    'enum' => 'string',
                 ],
             ],
         ],
@@ -51,6 +52,7 @@ return [
                     'linestring' => 'CrEOF\Spatial\DBAL\Types\Geometry\LineStringType',
                     'questionnaire_status' => \Application\DBAL\Types\QuestionnaireStatusType::class,
                     'survey_type' => \Application\DBAL\Types\SurveyTypeType::class,
+                    'enum' => \Application\DBAL\Types\QuestionnaireStatusType::class,
                 ],
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
                 'generate_proxies' => false,

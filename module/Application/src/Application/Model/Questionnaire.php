@@ -22,13 +22,13 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetimetz", nullable=false)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     private $dateObservationStart;
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetimetz", nullable=false)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     private $dateObservationEnd;
 
@@ -36,7 +36,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * @var Geoname
      * @ORM\ManyToOne(targetEntity="Geoname", inversedBy="questionnaires")
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
+     * @ORM\JoinColumn(onDelete="RESTRICT", nullable=false)
      * })
      */
     private $geoname;
@@ -109,7 +109,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     {
         return array_merge(parent::getJsonConfig(), [
             'name',
-            'status'
+            'status',
         ]);
     }
 
@@ -480,5 +480,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $key = 'questionnaire:' . $this->getId();
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
+    }
+
+    public function getSymbol()
+    {
+        return 'Q';
     }
 }

@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PopulationRepository")
  * @ORM\Table(uniqueConstraints={
- *     @ORM\UniqueConstraint(name="population_unique_official",columns={"year", "geoname_id", "part_id"}, options={"where": "(questionnaire_id IS NULL)"}),
- *     @ORM\UniqueConstraint(name="population_unique_non_official",columns={"year", "geoname_id", "part_id", "questionnaire_id"}, options={"where": "(questionnaire_id IS NOT NULL)"})
+ *     @ORM\UniqueConstraint(name="population_unique",columns={"year", "geoname_id", "part_id", "questionnaire_id"})
  * })
  * @ORM\HasLifecycleCallbacks
  */

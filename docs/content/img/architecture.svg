@@ -59,7 +59,7 @@
        <path fill="none" stroke="rgb(52,101,175)" d="M 453,3590 C 453,3820 1120,4050 1787,4050 2454,4050 3121,3820 3121,3590"/>
        <path fill="none" stroke="rgb(52,101,175)" d="M 453,3131 L 453,3131 Z"/>
        <path fill="none" stroke="rgb(52,101,175)" d="M 3121,6053 L 3121,6053 Z"/>
-       <text class="TextShape"><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="629" y="4729"><tspan fill="rgb(0,0,0)" stroke="none">PostgreSQL</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="974" y="5207"><tspan fill="rgb(0,0,0)" stroke="none">(postgis)</tspan></tspan></tspan></text>
+       <text class="TextShape"><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="629" y="4729"><tspan fill="rgb(0,0,0)" stroke="none">MariaDB</tspan></tspan></tspan><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="974" y="5207"></tspan></tspan></text>
       </g>
      </g>
      <g class="com.sun.star.drawing.CustomShape">

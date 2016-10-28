@@ -270,7 +270,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             LEFT JOIN filter AS question_filter ON (question_filter.id = question.filter_id)
 
             WHERE questionnaire.id IN (:questionnaires)
-            ORDER BY questionnaire.id
+            ORDER BY survey.id, geoname.id, questionnaire.id, question.id
             ', $rsm);
 
         $qb1->setParameters(['questionnaires' => $questionnaireIds]);

@@ -37,7 +37,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     /**
      * An array of alternate names: [questionnaireId => "my alternate name"]
      * @var array
-     * @ORM\Column(type="json_array", nullable=false, options={"default" = "{""-1"":null}"})
+     * @ORM\Column(type="json_array", nullable=false)
      */
     private $alternateNames = self::EMPTY_ASSOCIATIVE_ARRAY;
 
@@ -137,6 +137,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      */
     public function setAlternateNames(array $alternateNames)
     {
+        unset($alternateNames[-1]);
         if (empty($alternateNames)) {
             $alternateNames = self::EMPTY_ASSOCIATIVE_ARRAY;
         }

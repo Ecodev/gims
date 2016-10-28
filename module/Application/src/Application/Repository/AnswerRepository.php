@@ -28,13 +28,13 @@ class AnswerRepository extends AbstractChildRepository
             // to AbstractAnswerableQuestions and can't access to child class NumericQuestion::is_absolute
             $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
             $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
-            $rsm->addScalarResult('valuepercent', 'valuePercent');
-            $rsm->addScalarResult('valueabsolute', 'valueAbsolute');
+            $rsm->addScalarResult('valuePercent', 'valuePercent');
+            $rsm->addScalarResult('valueAbsolute', 'valueAbsolute');
             $rsm->addScalarResult('quality', 'quality');
             $rsm->addScalarResult('part_id', 'part_id');
             $rsm->addScalarResult('filter_id', 'filter_id');
-            $rsm->addScalarResult('questionname', 'questionName');
-            $rsm->addScalarResult('questionisabsolute', 'questionIsAbsolute');
+            $rsm->addScalarResult('questionName', 'questionName');
+            $rsm->addScalarResult('questionIsAbsolute', 'questionIsAbsolute');
 
             $qb = $this->getEntityManager()->createNativeQuery('
                 SELECT
@@ -63,7 +63,7 @@ class AnswerRepository extends AbstractChildRepository
             foreach ($res as $data) {
                 $valuePercent = is_null($data['valuePercent']) ? null : (float) $data['valuePercent'];
                 $valueAbsolute = is_null($data['valueAbsolute']) ? null : (float) $data['valueAbsolute'];
-                $value = $data['questionIsAbsolute'] === false ? $valuePercent : $valueAbsolute;
+                $value = $data['questionIsAbsolute'] ? $valueAbsolute : $valuePercent;
                 $value *= $data['quality'];
 
                 $answerData = [
@@ -158,15 +158,15 @@ class AnswerRepository extends AbstractChildRepository
             $whereClause = 'question.is_absolute = FALSE';
         }
 
-        $sql = sprintf('UPDATE answer SET %s
-                FROM questionnaire q
+        $sql = sprintf('UPDATE answer
+                    JOIN questionnaire q ON (answer.questionnaire_id = q.id)
                     JOIN survey s ON (q.survey_id = s.id)
                     JOIN geoname g ON (q.geoname_id = g.id)
                     JOIN population p ON (p.geoname_id = g.id AND s.year = p.year)
                     JOIN question ON (s.id = question.survey_id)
+                SET %s
                 WHERE %s
                     AND answer.part_id = p.part_id
-                    AND answer.questionnaire_id = q.id
                     AND answer.question_id = question.id
                     AND question.is_population = TRUE', $computing, $whereClause);
 

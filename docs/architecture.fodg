@@ -342,8 +342,7 @@
   <office:drawing>
    <draw:page draw:name="page1" draw:style-name="dp2" draw:master-page-name="Default">
     <draw:custom-shape draw:style-name="gr1" draw:text-style-name="P1" xml:id="id1" draw:id="id1" draw:layer="layout" svg:width="2.667cm" svg:height="2.921cm" svg:x="0.454cm" svg:y="3.132cm">
-     <text:p text:style-name="P1">PostgreSQL</text:p>
-     <text:p text:style-name="P1">(postgis)</text:p>
+     <text:p text:style-name="P1">MariaDB</text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="10800 6800 10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="0 6800 21600 18200" draw:type="flowchart-magnetic-disk" draw:enhanced-path="M 0 3400 Y 10800 0 21600 3400 L 21600 18200 Y 10800 21600 0 18200 Z N M 0 3400 Y 10800 6800 21600 3400 N"/>
     </draw:custom-shape>
     <draw:custom-shape draw:style-name="gr1" draw:text-style-name="P1" draw:layer="layout" svg:width="3.937cm" svg:height="5.461cm" svg:x="4.432cm" svg:y="6.998cm">

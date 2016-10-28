@@ -51,7 +51,7 @@ class ActivityTest extends AbstractModel
         $this->getEntityManager()->persist($filter);
         $this->getEntityManager()->flush();
 
-        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE activity CASCADE;');
+        $this->getEntityManager()->getConnection()->executeQuery('DELETE FROM activity;');
         $answer = new Answer();
         $answer->setQuestion($question)->setQuestionnaire($questionnaire)->setPart($part)->setValuePercent(0.55);
         $this->getEntityManager()->persist($answer);

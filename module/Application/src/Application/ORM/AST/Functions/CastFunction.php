@@ -33,6 +33,6 @@ class CastFunction extends FunctionNode
 
     public function getSql(SqlWalker $sqlWalker)
     {
-        return sprintf('CAST(%s AS %s)', $this->propertyName->dispatch($sqlWalker), $this->type);
+        return sprintf('CONVERT(%s, %s)', $this->propertyName->dispatch($sqlWalker), $this->type);
     }
 }

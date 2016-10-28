@@ -78,4 +78,9 @@ class Part extends AbstractModel implements Rule\ReferencableInterface
     {
         return $this->isTotal;
     }
+
+    public function getSymbol()
+    {
+        return 'P';
+    }
 }

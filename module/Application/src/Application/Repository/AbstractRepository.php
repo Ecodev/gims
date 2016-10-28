@@ -122,7 +122,7 @@ abstract class AbstractRepository extends EntityRepository
 
             $fieldWheres = [];
             foreach ($fields as $field) {
-                $fieldWheres[] = 'LOWER(CAST(' . $field . ' AS text)) LIKE LOWER(:' . $parameterName . ')';
+                $fieldWheres[] = 'LOWER(CAST(' . $field . ' AS CHAR)) LIKE LOWER(:' . $parameterName . ')';
             }
 
             if ($fieldWheres) {

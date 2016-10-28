@@ -86,6 +86,7 @@ class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
         $questionnaire = $this->getNewModelWithId(\Application\Model\Questionnaire::class);
         $question->addAlternateName($questionnaire, 'my alternate name');
         $alternates = $question->getAlternateNames();
+        $this->assertArrayNotHasKey(-1, $alternates);
         $this->assertArrayHasKey($questionnaire->getId(), $alternates);
         $this->assertEquals('my alternate name', $alternates[$questionnaire->getId()]);
     }

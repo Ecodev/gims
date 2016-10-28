@@ -8,9 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Discussion can be attached to various objects so users can debate on things
  * @ORM\Entity(repositoryClass="Application\Repository\DiscussionRepository")
  * @ORM\Table(uniqueConstraints={
- *     @ORM\UniqueConstraint(name="discussion_unique_on_survey",columns={"survey_id"}, options={"where": "(((survey_id IS NOT NULL) AND (questionnaire_id IS NULL)) AND (survey_id IS NULL))"}),
- *     @ORM\UniqueConstraint(name="discussion_unique_on_questionnaire",columns={"survey_id"}, options={"where": "(((survey_id IS NULL) AND (questionnaire_id IS NOT NULL)) AND (survey_id IS NULL))"}),
- *     @ORM\UniqueConstraint(name="discussion_unique_on_answer",columns={"survey_id"}, options={"where": "(((survey_id IS NULL) AND (questionnaire_id IS NOT NULL)) AND (survey_id IS NOT NULL))"}),
+ *     @ORM\UniqueConstraint(name="discussion_unique",columns={"survey_id", "questionnaire_id", "filter_id"}),
  * })
  */
 class Discussion extends AbstractModel

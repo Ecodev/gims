@@ -39,9 +39,10 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
      */
     protected function truncateDatabase()
     {
-        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE survey CASCADE;');
-        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE rule CASCADE;');
-        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE filter CASCADE;');
+        $this->getEntityManager()->getConnection()->executeQuery('DELETE FROM survey;');
+        $this->getEntityManager()->getConnection()->executeQuery('DELETE FROM rule;');
+        $this->getEntityManager()->getConnection()->executeQuery('UPDATE filter SET thematic_filter_id = NULL;');
+        $this->getEntityManager()->getConnection()->executeQuery('DELETE FROM filter;');
     }
 
     public function testJmpImport()

@@ -6,7 +6,6 @@
  * - ssh access to remote server (via ~/.ssh/config)
  * - both local and remote sites must be accesible via: /sites/MY_SITE
  * - both local and remote config/autoload/local.php files must contains the database connection info
- * - both local and remote database must be configured with ~/.pgpass file for prompt-free access
  */
 abstract class AbstractDatabase extends Task
 {
@@ -60,11 +59,13 @@ STRING;
         $config = require "$siteLocal/config/autoload/local.php";
         $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
         $host = $dbConfig['host'];
-        $username = $dbConfig['user'];
         $database = $dbConfig['dbname'];
+        $username = $dbConfig['user'];
+        $password = empty($dbConfig['password']) ? '' : '-p' . $dbConfig['password'];
 
         echo "dumping $dumpFile...\n";
-        $dumpCmd = "pg_dump --host $host --username $username --format=custom $database --no-privileges | gzip > \"$dumpFile\"";
+        $dumpCmd = "mysqldump -u $username $password -h $host --add-drop-table=TRUE --routines $database | gzip > \"$dumpFile\"";
+
         self::executeLocalCommand($dumpCmd);
     }
 
@@ -95,6 +96,7 @@ STRING;
         $host = $dbConfig['host'];
         $username = $dbConfig['user'];
         $database = $dbConfig['dbname'];
+        $password = empty($dbConfig['password']) ? '' : '-p' . $dbConfig['password'];
 
         echo "loading dump $dumpFile...\n";
         if (!is_readable($dumpFile)) {
@@ -102,13 +104,8 @@ STRING;
         }
 
         self::executeLocalCommand('./vendor/bin/doctrine-module orm:schema-tool:drop --full-database --force');
-        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP TYPE IF EXISTS questionnaire_status CASCADE;"');
-        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP TYPE IF EXISTS survey_type CASCADE;"');
-        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_delete ON geometry_columns CASCADE;"');
-        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_insert ON geometry_columns CASCADE;"');
-        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_update ON geometry_columns CASCADE;"');
-        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP FUNCTION IF EXISTS cascade_delete_rules_with_references() CASCADE;"');
-        self::executeLocalCommand("gunzip -c \"$dumpFile\" | pg_restore --host $host --username $username --no-owner --dbname=$database");
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP PROCEDURE IF EXISTS cascade_delete_rules_with_references;"');
+        self::executeLocalCommand("gunzip -c \"$dumpFile\" | mysql -u $username $password -h $host --database=$database");
         self::executeLocalCommand('./vendor/bin/doctrine-module migrations:migrate --no-interaction');
     }
 
@@ -116,7 +113,7 @@ STRING;
     {
         $siteLocal = trim(`git rev-parse --show-toplevel`);
 
-        $dumpFile = "/tmp/$remote." . exec("whoami") . ".backup.gz";
+        $dumpFile = "/tmp/$remote." . exec("whoami") . ".sql.gz";
         self::dumpDataRemotely($remote, $dumpFile);
         self::copyFile($remote, $dumpFile);
         self::loadDump($siteLocal, $dumpFile);

@@ -53,11 +53,22 @@ class RuleRepository extends \Application\Repository\AbstractRepository
     {
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->getEntityManager());
         $rsm->addRootEntityFromClassMetadata(\Application\Model\Rule\Rule::class, 'rule');
-        $native = $this->getEntityManager()->createNativeQuery('SELECT r.id, r.name, r.formula FROM rule AS r WHERE r.formula ~ :pattern', $rsm);
+        $native = $this->getEntityManager()->createNativeQuery('SELECT r.id, r.name, r.formula FROM rule AS r WHERE r.formula REGEXP :pattern', $rsm);
 
         $pattern = '{' . self::FORMULA_COMPONENT_PATTERN . $this->getObjectType($reference) . '\#' . $reference->getId() . '(?!\d)' . self::FORMULA_COMPONENT_PATTERN . '}';
         $native->setParameter('pattern', $pattern);
 
         return $native->getResult();
+    }
+
+    public function deleteDependencies(ReferencableInterface $reference)
+    {
+        $params = [
+            'id' => $reference->getId(),
+            'symbol' => $reference->getSymbol(),
+        ];
+        $sql = 'CALL cascade_delete_rules_with_references(:id, :symbol);';
+
+        $this->getEntityManager()->getConnection()->executeUpdate($sql, $params);
     }
 }

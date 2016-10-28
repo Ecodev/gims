@@ -13,6 +13,55 @@
             "year": 1991,
             "questions": [
                 {
+                    "id": 15,
+                    "name": "Tap water",
+                    "alternateNames": {
+                        "2": "Tap"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 4
+                    },
+                    "answers": [
+                        {
+                            "id": 1,
+                            "valuePercent": 0.243446,
+                            "valueAbsolute": 5421458.187684,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 2
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 2,
+                            "valuePercent": 0.001575,
+                            "valueAbsolute": 138072.2742,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 2
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 3,
+                            "valuePercent": 0.048647,
+                            "valueAbsolute": 5347987.99973,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 2
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
                     "id": 16,
                     "name": "Tubewell, borehole",
                     "alternateNames": {
@@ -247,55 +296,6 @@
                             "id": 18,
                             "valuePercent": 0.003458,
                             "valueAbsolute": 380153.81222,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 2
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 15,
-                    "name": "Tap water",
-                    "alternateNames": {
-                        "2": "Tap"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 4
-                    },
-                    "answers": [
-                        {
-                            "id": 1,
-                            "valuePercent": 0.243446,
-                            "valueAbsolute": 5421458.187684,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 2
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 2,
-                            "valuePercent": 0.001575,
-                            "valueAbsolute": 138072.2742,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 2
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 3,
-                            "valuePercent": 0.048647,
-                            "valueAbsolute": 5347987.99973,
                             "quality": 1,
                             "questionnaire": {
                                 "id": 2
@@ -634,20 +634,20 @@
             "year": 1994,
             "questions": [
                 {
-                    "id": 168,
-                    "name": "Traditional latrine",
+                    "id": 21,
+                    "name": "Piped water into dwelling",
                     "alternateNames": {
-                        "3": "Pit latrine"
+                        "3": "Piped into residence"
                     },
                     "isAbsolute": false,
                     "filter": {
-                        "id": 129
+                        "id": 6
                     },
                     "answers": [
                         {
-                            "id": 411,
-                            "valuePercent": 0.08400000000000001,
-                            "valueAbsolute": 2102686.824,
+                            "id": 19,
+                            "valuePercent": 0.267,
+                            "valueAbsolute": 6683540.262,
                             "quality": 1,
                             "questionnaire": {
                                 "id": 3
@@ -657,9 +657,9 @@
                             }
                         },
                         {
-                            "id": 412,
-                            "valuePercent": 0.166,
-                            "valueAbsolute": 15328025.996,
+                            "id": 20,
+                            "valuePercent": 0.003,
+                            "valueAbsolute": 277012.518,
                             "quality": 1,
                             "questionnaire": {
                                 "id": 3
@@ -669,58 +669,9 @@
                             }
                         },
                         {
-                            "id": 413,
-                            "valuePercent": 0.157,
-                            "valueAbsolute": 18427010.244,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 169,
-                    "name": "Pit latrine without slab\/open pit",
-                    "alternateNames": {
-                        "3": "Open latrine"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 130
-                    },
-                    "answers": [
-                        {
-                            "id": 414,
-                            "valuePercent": 0.091,
-                            "valueAbsolute": 2277910.726,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 415,
-                            "valuePercent": 0.207,
-                            "valueAbsolute": 19113863.742,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 416,
-                            "valuePercent": 0.193,
-                            "valueAbsolute": 22652311.956,
+                            "id": 21,
+                            "valuePercent": 0.033,
+                            "valueAbsolute": 3873193.236,
                             "quality": 1,
                             "questionnaire": {
                                 "id": 3
@@ -770,153 +721,6 @@
                             "id": 24,
                             "valuePercent": 0.013,
                             "valueAbsolute": 1525803.396,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 171,
-                    "name": "No facility, bush, field ",
-                    "alternateNames": {
-                        "3": "No facility\/bush"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 156
-                    },
-                    "answers": [
-                        {
-                            "id": 420,
-                            "valuePercent": 0.048,
-                            "valueAbsolute": 1201535.328,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 421,
-                            "valuePercent": 0.334,
-                            "valueAbsolute": 30840727.004,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 422,
-                            "valuePercent": 0.302,
-                            "valueAbsolute": 35445586.584,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 172,
-                    "name": "Other 1",
-                    "alternateNames": {
-                        "3": "Other"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 158
-                    },
-                    "answers": [
-                        {
-                            "id": 423,
-                            "valuePercent": 0.006,
-                            "valueAbsolute": 150191.916,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 424,
-                            "valuePercent": 0.004,
-                            "valueAbsolute": 369350.024,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 425,
-                            "valuePercent": 0.004,
-                            "valueAbsolute": 469477.968,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    "id": 170,
-                    "name": "Hanging toilet\/hanging latrine",
-                    "alternateNames": {
-                        "3": "Hanging latrine"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 131
-                    },
-                    "answers": [
-                        {
-                            "id": 417,
-                            "valuePercent": 0.049,
-                            "valueAbsolute": 1226567.314,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 418,
-                            "valuePercent": 0.1,
-                            "valueAbsolute": 9233750.6,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 419,
-                            "valuePercent": 0.094,
-                            "valueAbsolute": 11032732.248,
                             "quality": 1,
                             "questionnaire": {
                                 "id": 3
@@ -1222,55 +1026,6 @@
                     ]
                 },
                 {
-                    "id": 21,
-                    "name": "Piped water into dwelling",
-                    "alternateNames": {
-                        "3": "Piped into residence"
-                    },
-                    "isAbsolute": false,
-                    "filter": {
-                        "id": 6
-                    },
-                    "answers": [
-                        {
-                            "id": 19,
-                            "valuePercent": 0.267,
-                            "valueAbsolute": 6683540.262,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 1
-                            }
-                        },
-                        {
-                            "id": 20,
-                            "valuePercent": 0.003,
-                            "valueAbsolute": 277012.518,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 2
-                            }
-                        },
-                        {
-                            "id": 21,
-                            "valuePercent": 0.033,
-                            "valueAbsolute": 3873193.236,
-                            "quality": 1,
-                            "questionnaire": {
-                                "id": 3
-                            },
-                            "part": {
-                                "id": 3
-                            }
-                        }
-                    ]
-                },
-                {
                     "id": 166,
                     "name": "to septic tank",
                     "alternateNames": {
@@ -1358,6 +1113,251 @@
                             "id": 410,
                             "valuePercent": 0.157,
                             "valueAbsolute": 18427010.244,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 168,
+                    "name": "Traditional latrine",
+                    "alternateNames": {
+                        "3": "Pit latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 129
+                    },
+                    "answers": [
+                        {
+                            "id": 411,
+                            "valuePercent": 0.08400000000000001,
+                            "valueAbsolute": 2102686.824,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 412,
+                            "valuePercent": 0.166,
+                            "valueAbsolute": 15328025.996,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 413,
+                            "valuePercent": 0.157,
+                            "valueAbsolute": 18427010.244,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 169,
+                    "name": "Pit latrine without slab\/open pit",
+                    "alternateNames": {
+                        "3": "Open latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 130
+                    },
+                    "answers": [
+                        {
+                            "id": 414,
+                            "valuePercent": 0.091,
+                            "valueAbsolute": 2277910.726,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 415,
+                            "valuePercent": 0.207,
+                            "valueAbsolute": 19113863.742,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 416,
+                            "valuePercent": 0.193,
+                            "valueAbsolute": 22652311.956,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 170,
+                    "name": "Hanging toilet\/hanging latrine",
+                    "alternateNames": {
+                        "3": "Hanging latrine"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 131
+                    },
+                    "answers": [
+                        {
+                            "id": 417,
+                            "valuePercent": 0.049,
+                            "valueAbsolute": 1226567.314,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 418,
+                            "valuePercent": 0.1,
+                            "valueAbsolute": 9233750.6,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 419,
+                            "valuePercent": 0.094,
+                            "valueAbsolute": 11032732.248,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 171,
+                    "name": "No facility, bush, field ",
+                    "alternateNames": {
+                        "3": "No facility\/bush"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 156
+                    },
+                    "answers": [
+                        {
+                            "id": 420,
+                            "valuePercent": 0.048,
+                            "valueAbsolute": 1201535.328,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 421,
+                            "valuePercent": 0.334,
+                            "valueAbsolute": 30840727.004,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 422,
+                            "valuePercent": 0.302,
+                            "valueAbsolute": 35445586.584,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 172,
+                    "name": "Other 1",
+                    "alternateNames": {
+                        "3": "Other"
+                    },
+                    "isAbsolute": false,
+                    "filter": {
+                        "id": 158
+                    },
+                    "answers": [
+                        {
+                            "id": 423,
+                            "valuePercent": 0.006,
+                            "valueAbsolute": 150191.916,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 1
+                            }
+                        },
+                        {
+                            "id": 424,
+                            "valuePercent": 0.004,
+                            "valueAbsolute": 369350.024,
+                            "quality": 1,
+                            "questionnaire": {
+                                "id": 3
+                            },
+                            "part": {
+                                "id": 2
+                            }
+                        },
+                        {
+                            "id": 425,
+                            "valuePercent": 0.004,
+                            "valueAbsolute": 469477.968,
                             "quality": 1,
                             "questionnaire": {
                                 "id": 3

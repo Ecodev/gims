@@ -98,13 +98,13 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastLogin;
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $firstLogin;
 
@@ -140,7 +140,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateTokenGenerated;
 

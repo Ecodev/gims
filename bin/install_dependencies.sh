@@ -10,13 +10,12 @@ fi
 # Exit script on any error
 set -e
 
-echo "Installing PostGIS and other packages..."
+echo "Installing apache2 and other packages..."
 sudo apt-get -qq update
 sudo apt-get install -qq software-properties-common # to get next command: add-apt-repository
-sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
 sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
-sudo apt-get -qq install postgresql-9.3-postgis-2.1 nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json
+sudo apt-get -qq install nodejs apache2
 
 echo "Installing php-cs-fixer..."
 sudo wget http://cs.sensiolabs.org/get/php-cs-fixer.phar -O /usr/local/bin/php-cs-fixer
@@ -65,13 +64,9 @@ if [[ "$1" = "configure" ]]; then
     echo "127.0.0.1 gims.lan" | sudo tee --append /etc/hosts
 
     echo "Init database..."
-    which pg_dump
-    pg_dump --version
-    which pg_restore
-    pg_restore --version
+
+    which mysql
+    mysql --version
+    mysql -e 'create database gims;'
     cp config/autoload/local.php.dist config/autoload/local.php
-    sudo -u postgres psql -c 'create database gims;' -U postgres
-    sudo -u postgres createuser --no-superuser --no-createdb --no-createrole gims
-    sudo -u postgres createuser --no-superuser --no-createdb --no-createrole devgims
-    sudo -u postgres createuser --no-superuser --no-createdb --no-createrole backup
 fi

@@ -19,7 +19,7 @@ Installation
 ./vendor/bin/phing build
 ```
 
-2. Create a database in PostgreSQL named "gims"
+2. Create a database in MariaDB named "gims"
 3. Configure database in ``config/autoload/local.php``
 4. Set up a virtual host to point to ``htdocs/`` directory
 

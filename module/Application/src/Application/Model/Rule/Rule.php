@@ -246,11 +246,25 @@ class Rule extends \Application\Model\AbstractRecordableActivity implements Refe
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
+    /**
+     * Automatically called by Doctrine when the object is deleted to also delete dependencies
+     * @ORM\PreRemove
+     */
+    public function deleteDependencies()
+    {
+        $ruleRepository = \Application\Module::getEntityManager()->getRepository(\Application\Model\Rule\Rule::class);
+        $ruleRepository->deleteDependencies($this);
+    }
 
     public function getActivityData()
     {
         return [
             'name' => $this->getName(),
         ];
+    }
+
+    public function getSymbol()
+    {
+        return 'R';
     }
 }

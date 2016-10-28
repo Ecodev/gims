@@ -13,12 +13,12 @@
  */
 $host = 'localhost';
 $database = 'gims';
-$username = 'postgres';
+$username = 'root';
 $password = '';
 
 return [
     'db' => [
-        'dsn' => "pgsql:dbname=$database;host=$host",
+        'dsn' => "mysql:dbname=$database;host=$host",
         'username' => $username,
         'password' => $password,
     ],

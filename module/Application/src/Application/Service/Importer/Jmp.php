@@ -1407,23 +1407,16 @@ STRING;
     {
         $conditions = [];
         foreach ($this->ratioSynonyms as $s) {
-            $conditions[] = "name ILIKE '%$s%'";
+            $conditions[] = "name LIKE '%$s%'";
         }
         $synonyms = implode(' OR ', $conditions);
         $id = $this->filterForRatio->getId();
 
-        // Convert reference to ratios to be reference to filter
-        $ratioToFilter = "UPDATE rule SET formula = REGEXP_REPLACE(formula, CONCAT('R\#(',
-    (
-        SELECT string_agg(id::varchar, '|')
-        FROM rule
-        WHERE $synonyms
-    )
-, '),')
-, 'F#$id,')
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery("SELECT id FROM rule WHERE $synonyms");
+        $idsPattern = implode('|', $stmt->fetchAll(\PDO::FETCH_COLUMN));
 
-";
-        //        v($ratioToFilter);
+        // Convert reference to ratios to be reference to filter
+        $ratioToFilter = "UPDATE rule SET formula = REGEXP_REPLACE(formula, CONCAT('R\#($idsPattern),'), 'F#$id,')";
         $a = $this->getEntityManager()->getConnection()->executeUpdate($ratioToFilter);
 
         // Clean up non-used rules after finishRatios()
