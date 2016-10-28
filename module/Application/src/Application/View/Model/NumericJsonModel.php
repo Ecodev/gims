@@ -37,6 +37,7 @@ class NumericJsonModel extends JsonModel
         // This is not very clean, but it allow us to treat very big string (+40KB) albeit slowly.
         // Since this is only used during unit testing, it is considered acceptable.
         ini_set('pcre.backtrack_limit', 100000000);
+        ini_set('pcre.jit', 0);
         $result = preg_replace('/(-?\d+\.?\d*)(?=([^"\\\\]*(\\\\.|"([^"\\\\]*\\\\.)*[^"\\\\]*"))*[^"]*$)/', '"$1"', $json);
 
         return $result;
