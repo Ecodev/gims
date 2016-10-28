@@ -35,6 +35,7 @@
         },
         {
             "field": "f167p1",
+            "id": 167,
             "part": "Urban",
             "partId": 1,
             "displayName": "I+s",
@@ -50,6 +51,7 @@
         },
         {
             "field": "f167p1a",
+            "id": 167,
             "part": "Urban",
             "partId": 1,
             "displayName": "I+sA",
@@ -65,6 +67,7 @@
         },
         {
             "field": "f167p2",
+            "id": 167,
             "part": "Rural",
             "partId": 2,
             "displayName": "I+s",
@@ -80,6 +83,7 @@
         },
         {
             "field": "f167p2a",
+            "id": 167,
             "part": "Rural",
             "partId": 2,
             "displayName": "I+sA",
@@ -95,6 +99,7 @@
         },
         {
             "field": "f167p3",
+            "id": 167,
             "part": "Total",
             "partId": 3,
             "displayName": "I+s",
@@ -110,6 +115,7 @@
         },
         {
             "field": "f167p3a",
+            "id": 167,
             "part": "Total",
             "partId": 3,
             "displayName": "I+sA",
