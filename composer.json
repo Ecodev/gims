@@ -50,8 +50,6 @@
         "mischiefcollective/colorjizz": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.1.*",
-        "johnkary/phpunit-speedtrap": "dev-master",
-        "lstrojny/phpunit-clever-and-smart": "~0.5"
+        "phpunit/phpunit": "4.1.*"
     }
 }

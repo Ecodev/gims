@@ -21,28 +21,4 @@
         <!--<log type="coverage-html" target="./data/logs/tests/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
     </logging>
 
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
-            <arguments>
-                <array>
-                    <element key="slowThreshold">
-                        <integer>1000</integer>
-                    </element>
-                    <element key="reportLength">
-                        <integer>15</integer>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-        <listener class="PHPUnit\Runner\CleverAndSmart\TestListener">
-            <arguments>
-                <object class="PHPUnit\Runner\CleverAndSmart\Storage\Sqlite3Storage">
-                    <arguments>
-                        <string>./data/logs/tests/phpunit-cas.db</string>
-                    </arguments>
-                </object>
-            </arguments>
-        </listener>
-    </listeners>
-
 </phpunit>
