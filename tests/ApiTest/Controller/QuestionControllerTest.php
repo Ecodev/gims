@@ -55,7 +55,7 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
     {
         $data = [
             'name' => 'bar',
-            'type' => \Application\Model\QuestionType::$CHAPTER,
+            'type' => (string) \Application\Model\QuestionType::$CHAPTER,
         ];
 
         $this->dispatch($this->getRoute('put') . '?fields=type', Request::METHOD_PUT, $data);

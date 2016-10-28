@@ -28,6 +28,15 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     protected $hydrator;
 
     /**
+     * Extremely dirty way to retrieve ServiceManger. Highly discouraged to use it.
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getServiceLocator()
+    {
+        return \Application\Module::getServiceManager();
+    }
+
+    /**
      * Returns Authorization service
      * @return \Application\Service\AuthorizationService
      */

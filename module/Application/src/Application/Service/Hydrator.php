@@ -338,7 +338,7 @@ class Hydrator
         $className = get_class($object);
         $methods = new MethodReflection($className, $methodName);
         foreach ($methods->getParameters() as $parameter) {
-            $parameterType = $parameter->getType();
+            $parameterType = $parameter->detectType();
             break; // should be only one parameter in context of setter
         }
 

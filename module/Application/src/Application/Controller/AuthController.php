@@ -14,6 +14,15 @@ class AuthController extends \ZfcUser\Controller\UserController
     use \Application\Traits\EntityManagerAware;
 
     /**
+     * Extremely dirty way to retrieve ServiceManger. Highly discouraged to use it.
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getServiceLocator()
+    {
+        return \Application\Module::getServiceManager();
+    }
+
+    /**
      * Return the user info if logged in
      * @return array|false
      */

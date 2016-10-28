@@ -188,7 +188,9 @@ return [
             'Application\Controller\Index' => \Application\Controller\IndexController::class,
             'Application\Controller\Console' => \Application\Controller\ConsoleController::class,
             'Application\Controller\Email' => \Application\Controller\EmailController::class,
-            'zfcuser' => \Application\Controller\AuthController::class,
+        ],
+        'factories' => [
+            'zfcuser' => \Application\Controller\AuthControllerFactory::class,
         ],
     ],
     'view_manager' => [

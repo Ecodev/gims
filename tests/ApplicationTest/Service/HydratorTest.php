@@ -152,7 +152,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $questionnaire->setSurvey($survey);
 
         $data = [
-            'comments' => 'some comments',
+//            'comments' => 'some comments',
             'survey' => [
                 'id' => 12345,
                 'name' => 'this should not overwrite the original name',
@@ -273,7 +273,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 ], $this->hydrator->extract($questionnaire, [
                     'comments',
                     'survey' => ['name'],
-                    'unkown properties' => ['foo', 'bar']
+                    'unkown properties' => ['foo', 'bar'],
                 ]), 'should return subobject, but only known one');
     }
 
