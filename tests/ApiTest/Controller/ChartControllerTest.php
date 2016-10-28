@@ -21,7 +21,7 @@ class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 
     public function getValidDataProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/api/chart/getSeries');
+        return new \ApiTest\JsonFileIterator('tests/data/api/chart/getSeries');
     }
 
     /**
@@ -38,7 +38,7 @@ class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 
     public function getValidDataProviderPanel()
     {
-        return new \ApiTest\JsonFileIterator('data/api/chart/getPanelFilters');
+        return new \ApiTest\JsonFileIterator('tests/data/api/chart/getPanelFilters');
     }
 
     /**

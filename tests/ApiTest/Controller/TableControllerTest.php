@@ -20,7 +20,7 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 
     public function getValidDataFilterProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/api/table/filter');
+        return new \ApiTest\JsonFileIterator('tests/data/api/table/filter');
     }
 
     /**
@@ -37,7 +37,7 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 
     public function getValidDataQuestionnaireProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/api/table/questionnaire');
+        return new \ApiTest\JsonFileIterator('tests/data/api/table/questionnaire');
     }
 
     /**
@@ -54,7 +54,7 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 
     public function getValidDataCountryProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/api/table/country');
+        return new \ApiTest\JsonFileIterator('tests/data/api/table/country');
     }
 
     /**

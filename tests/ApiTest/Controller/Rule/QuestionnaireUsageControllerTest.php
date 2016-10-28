@@ -30,7 +30,7 @@ class QuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageControl
 
     public function getComputedQuestionnaireUsageProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/api/questionnaireUsage/compute');
+        return new \ApiTest\JsonFileIterator('tests/data/api/questionnaireUsage/compute');
     }
 
     /**

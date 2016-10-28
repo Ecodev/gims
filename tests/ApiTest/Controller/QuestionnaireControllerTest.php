@@ -195,7 +195,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
 
     public function structureProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/api/questionnaire/structure');
+        return new \ApiTest\JsonFileIterator('tests/data/api/questionnaire/structure');
     }
 
     /**
