@@ -67,6 +67,6 @@ if [[ "$1" = "configure" ]]; then
 
     which mysql
     mysql --version
-    mysql -e 'create database gims;'
+    mysql -e 'CREATE DATABASE gims CHARACTER SET utf8 COLLATE utf8_unicode_ci;'
     cp config/autoload/local.php.dist config/autoload/local.php
 fi
