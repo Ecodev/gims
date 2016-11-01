@@ -24,7 +24,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false, options={"default" = ""})
+     * @ORM\Column(type="string", length=255, nullable=false, options={"default"="", "collation"="utf8_bin"})
      */
     private $code;
 
