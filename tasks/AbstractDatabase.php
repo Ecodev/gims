@@ -64,7 +64,7 @@ STRING;
         $password = empty($dbConfig['password']) ? '' : '-p' . $dbConfig['password'];
 
         echo "dumping $dumpFile...\n";
-        $dumpCmd = "mysqldump -u $username $password -h $host --add-drop-table=TRUE --routines $database | gzip > \"$dumpFile\"";
+        $dumpCmd = "mysqldump -u $username $password -h $host --add-drop-table=TRUE --routines $database | sed 's/DEFINER=`[^`]*`@`[^`]*`//' | gzip > \"$dumpFile\"";
 
         self::executeLocalCommand($dumpCmd);
     }
