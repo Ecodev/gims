@@ -61,7 +61,7 @@ echo "Clean Zend cache..."
 rm -vf data/cache/*cache*.php
 
 echo "Compiling CSS..."
-compass compile -s compressed --force
+./node_modules/.bin/gulp
 
 echo "Compiling JavaScript..."
 TARGET="tmp/application.js"

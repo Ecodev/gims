@@ -73,7 +73,7 @@ Considering the complexity and increasing amount of code that makes up the
 system, we use several additional tools to help with the development process
 itself. To optimize the efficiency of the application, we use preprocessors
 for JavaScript and CSS (`UglifyJs <https://github.com/mishoo/UglifyJS>`_ and
-`Compass <http://compass-style.org/>`_), and to ensure the technical quality
+`Sass <http://sass-lang.com//>`_), and to ensure the technical quality
 of the application, we write unit tests with **PHPUnit** and **Karma**
 which are then run by `Travis CI <https://travis-ci.org/Ecodev/gims>`_
 automatically. In addition to that, the code quality is checked with

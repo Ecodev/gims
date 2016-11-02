@@ -57,7 +57,7 @@ html {
 }
 
 .opacity33{
-    @include opacity(0.33);
+    opacity: 0.33;
 }
 
 .column-loading {
@@ -329,7 +329,7 @@ div.windowHeight .modal-body {
 /* Differs local, dev and production instances */
 body.demo {
     .navbar-fixed-top {
-        @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #7C0400 30px, #7C0400 60px));
+        background-image: repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #7C0400 30px, #7C0400 60px);
 
         .navbar-brand:before {
             content: 'DEMO VERSION ';
@@ -341,7 +341,7 @@ body.demo {
 
 body.local {
     .navbar-fixed-top {
-        @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #075f7f 30px, #075f7f 60px));
+        background: repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #075f7f 30px, #075f7f 60px);
 
         .navbar-brand:before {
             content: 'LOCAL ';

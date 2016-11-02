@@ -618,7 +618,7 @@
      </draw:text-box>
     </draw:frame>
     <draw:custom-shape draw:style-name="gr9" draw:text-style-name="P1" draw:layer="layout" svg:width="6.616cm" svg:height="1.327cm" svg:x="10.656cm" svg:y="15.356cm">
-     <text:p text:style-name="P1">Compass (Sass)</text:p>
+     <text:p text:style-name="P1">Sass</text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
       <draw:equation draw:name="f0" draw:formula="left+2540"/>
       <draw:equation draw:name="f1" draw:formula="right-2540"/>

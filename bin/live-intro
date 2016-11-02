@@ -6,6 +6,6 @@ server = Server()
 
 # run a shell command
 server.watch('htdocs/docs/*.html', 'echo')
-server.watch('module/Application/sass/*', 'compass compile')
+server.watch('module/Application/sass/*', './node_modules/.bin/gulp')
 
 server.serve(root='htdocs/')
