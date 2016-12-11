@@ -1,7 +1,7 @@
 {
     "name": "ecodev/gims",
     "description": "GIMS",
-    "homepage": "http://www.gimsinitiative.org",
+    "homepage": "https://www.gimsinitiative.org",
     "license": "MIT",
     "autoload": {
         "psr-0": {

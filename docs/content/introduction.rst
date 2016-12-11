@@ -11,7 +11,7 @@ meaningful analysis that help decision makers initiate appropriate actions
 on the field.
 
 For further information, see the `gimsinitiative.org website
-<http://www.gimsinitiative.org/about>`_ and take a look at the `short
+<https://www.gimsinitiative.org/about>`_ and take a look at the `short
 presentation <http://dev.gimsinitiative.org/intro>`_ of what this web
 application can do.
 
